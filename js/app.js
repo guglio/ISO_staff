@@ -27,12 +27,12 @@ var app = angular.module('app', ['ngRoute'])
     });
   })
   .controller('AllCtrl', function($scope, $http) {
-    $http.get('data/dipendenti.json')
+    $http.get('data/dipendenti_test.json')
          .then(function(res){
             $scope.personale = res.data;
             window.localStorage['dipendenti'] = angular.toJson($scope.personale);
           });
-    $http.get('data/corsi.json')
+    $http.get('data/corsi_test.json')
          .then(function(res){
             window.localStorage['corsi'] = angular.toJson(res.data);
           });

@@ -1,0 +1,124 @@
+[{
+		"tipologia": null,
+		"numero_addestramento": "01/16",
+		"obiettivo": null,
+		"durata": "4 ore",
+		"argomenti": "Progettazione di Strutture in XLAM",
+		"documentazione": "Materiale didattico",
+		"metodo_verifica": null,
+		"docente": "Giulia Mucciarelli",
+		"data_inizio": "Gennaio 2016",
+		"data_fine": "Gennaio 2016",
+		"data": null,
+		"partecipanti": [{
+			"dipendente": "83954tyrefbasdufbhdug",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "dijfofsdf8g0",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "alsidhasdhasknas",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "123456789abcd",
+			"risultato": "positivo"
+		}]
+	}, {
+		"tipologia": null,
+		"numero_addestramento": "02/16",
+		"obiettivo": null,
+		"durata": "1 ora",
+		"argomenti": "Privacy",
+		"documentazione": "Materiale didattico",
+		"metodo_verifica": null,
+		"docente": "Giulia Mucciarelli",
+		"data_inizio": "Entro 2016",
+		"data_fine": "Entro 2016",
+		"risultato": null,
+		"data": null,
+		"partecipanti": [{
+			"dipendente": "83954tyrefbasdufbhdug",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "dijfofsdf8g0",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "alsidhasdhasknas",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "123456789abcd",
+			"risultato": "positivo"
+		}]
+	}, {
+		"tipologia": null,
+		"numero_addestramento": "03/16",
+		"obiettivo": null,
+		"durata": "4 ore",
+		"argomenti": "Revisione Manuale Qualità",
+		"documentazione": "",
+		"metodo_verifica": null,
+		"docente": "Giulia Mucciarelli",
+		"data_inizio": "Entro 2016",
+		"data_fine": "Entro 2016",
+		"risultato": null,
+		"data": null,
+		"partecipanti": [{
+			"dipendente": "83954tyrefbasdufbhdug",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "dijfofsdf8g0",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "alsidhasdhasknas",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "123456789abcd",
+			"risultato": "positivo"
+		}]
+	}, {
+		"tipologia": null,
+		"numero_addestramento": "04/16",
+		"obiettivo": null,
+		"durata": "4 ore",
+		"argomenti": "Prevenzione incendi",
+		"documentazione": "Materiale didattico",
+		"metodo_verifica": null,
+		"docente": "Gola Diego",
+		"data_inizio": "Entro 2016",
+		"data_fine": "Entro 2016",
+		"risultato": null,
+		"data": null,
+		"partecipanti": [{
+			"dipendente": "83954tyrefbasdufbhdug",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "dijfofsdf8g0",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "alsidhasdhasknas",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "123456789abcd",
+			"risultato": "positivo"
+		}]
+	}, {
+		"tipologia": null,
+		"numero_addestramento": "05/16",
+		"obiettivo": null,
+		"durata": "4 ore",
+		"argomenti": "Nozioni di primo soccorso",
+		"documentazione": "Materiale didattico",
+		"metodo_verifica": null,
+		"docente": "Gola Diego",
+		"data_inizio": "Entro 2016",
+		"data_fine": "Entro 2016",
+		"risultato": null,
+		"data": null,
+		"partecipanti": [{
+			"dipendente": "alsidhasdhasknas",
+			"risultato": "positivo"
+		}, {
+			"dipendente": "123456789abcd",
+			"risultato": "positivo"
+		}]
+	}]
