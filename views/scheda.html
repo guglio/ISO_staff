@@ -1,4 +1,4 @@
-<div class="dipendente" ng-controller="SchedaCtrl">
+<div class="dipendente">
   <div class="container-fluid">
     <ul class="pager">
       <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Back</a></li>
@@ -13,14 +13,14 @@
         <p><strong>Residente:</strong> {{dipendente.indirizzo}}, {{dipendente.cap}} {{dipendente.comune}} ({{dipendente.provincia}})</p>
       </div>
       <div class="col-md-5">
-        <p><strong>Data assunzione:</strong> {{dipendente.data_assunzione}}</p>
+        <p><strong>Data assunzione:</strong> {{dipendente.data_assunzione | date:"dd/MM/yyyy" }}</p>
         <p><strong>Matricola numero:</strong> {{dipendente.cod_dipendente}}</p>
         <p><strong>Qualifica:</strong> {{dipendente.qualifica}}</p>
         <p><strong>Cantiere:</strong> {{dipendente.cantiere}}</p>
       </div>
     </div>
   </div>
-  <div class="container-fluid" ng-controller="CorsiCtrl">
+  <div class="container-fluid" ng-show="corsi">
     <h3 class="text-center">Tabella riassuntiva della formazione/addestramento attuati</h3>
     <table class="table table-hover table-condensed">
       <thead>
@@ -34,11 +34,11 @@
       </thead>
       <tbody>
         <tr ng-repeat="corso in corsi">
-          <td>{{corso.data}}</td>
-          <td>{{corso.numero_addestramento}}</td>
-          <td>{{corso.argomenti}}</td>
-          <td>{{corso.durata}}</td>
-          <td>{{corso.esito}}</td>
+          <td>{{corso.doc.data}}</td>
+          <td>{{corso.doc.numero_addestramento}}</td>
+          <td>{{corso.doc.argomenti}}</td>
+          <td>{{corso.doc.durata}}</td>
+          <td>{{corso.doc.esito}}</td>
         </tr>
       </tbody>
     </table>

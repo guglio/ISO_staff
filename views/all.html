@@ -3,22 +3,28 @@
   <div class="form-inline">
       <label for="searchForm">Search: </label>
       <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+      <a class="btn btn-default" href="/#!/new_dipendente" role="button">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi dipendente
+      </a>
+      <a class="btn btn-default" href="/#!/new_corso" role="button">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi corso
+      </a>
   </div>
   <table class="table table-hover">
     <thead>
     <tr>
-      <th>Cognome</th>
+      <th>Cognome <span class="glyphicon glyphicon-sort-by-alphabet" ng-click="asc = false"></span><span class="glyphicon glyphicon-sort-by-alphabet-alt" ng-click="asc = true"></span></th>
       <th>Nome</th>
       <th>Cantiere</th>
       <th>Qualifica</th>
     </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="dipendente in personale | filter:search:strict">
-        <td><a href="/#!/scheda/{{dipendente.cod_fiscale}}">{{dipendente.cognome}}</a></td>
-        <td><a href="/#!/scheda/{{dipendente.cod_fiscale}}">{{dipendente.nome}}</a></td>
-        <td><a href="/#!/scheda/{{dipendente.cod_fiscale}}">{{dipendente.cantiere}}</a></td>
-        <td><a href="/#!/scheda/{{dipendente.cod_fiscale}}">{{dipendente.qualifica}}</a></td>
+      <tr ng-repeat="dipendente in personale | filter:search:strict | orderBy: orderProp : asc">
+        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.cognome}}</a></td>
+        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.nome}}</a></td>
+        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.cantiere}}</a></td>
+        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.qualifica}}</a></td>
       </tr>
     </tbody>
   </table>

@@ -1,0 +1,100 @@
+<div class="dipendente">
+  <div class="container-fluid">
+    <ul class="pager">
+      <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Back</a></li>
+      <li><h1 class="text-center">Dati nuovo dipendente</h1></li>
+    </ul>
+    <h3 class="text-center">Dati anagrafici</h3>
+    <div class="row">
+      <form class="form-horizontal" ng-submit="submitMyForm()">
+        <div class="form-group">
+          <label for="nome" class="col-sm-2 control-label">Nome</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="nome" placeholder="Nome" ng-model="fields.nome">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Cognome</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="cognome" placeholder="Cognome" ng-model="fields.cognome">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="nascita" class="col-sm-2 control-label">Data di nascita</label>
+          <div class="col-sm-10">
+            <input type="date" class="form-control" id="nascita" placeholder="Data di nascita (gg/mm/aaaa)"  ng-model="fields.data_nascita">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="comune_nascita" class="col-sm-2 control-label">Comune di nascita</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="comune_nascita" placeholder="Comune di nascita" ng-model="fields.comune_nascita">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cf" class="col-sm-2 control-label">Codice Fiscale</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="cf" placeholder="Codice Fiscale" ng-model="fields.cod_fiscale">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cantiere" class="col-sm-2 control-label">Cantiere</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="cantiere" placeholder="Cantiere" ng-model="fields.cantiere">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="qualifica" class="col-sm-2 control-label">Qualifica</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="qualifica" placeholder="Qualifica" ng-model="fields.qualifica">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cod_dipendente" class="col-sm-2 control-label">Codice Dipendente</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="cod_dipendente" placeholder="Codice Dipendente" ng-model="fields.cod_dipendente">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="assunzione" class="col-sm-2 control-label">Data assunzione</label>
+          <div class="col-sm-10">
+            <input type="date" class="form-control" id="assunzione" placeholder="Data Assunzione (gg/mm/aaaa)" ng-model="fields.data_assunzione">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cod_contratto" class="col-sm-2 control-label">Codice Contratto</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="ccod_contrattof" placeholder="Codice Contratto" ng-model="fields.cod_contratto">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="temp_contratto" class="col-sm-2 control-label">Contratto a tempo</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="temp_contratto" placeholder="Tempo indeterminato / etc" ng-model="fields.contratto_tempo">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Indirizzo</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Via / Corso / Piazza n. 1" ng-model="fields.indirizzo">
+          </div>
+          <div class="col-sm-1">
+            <input type="text" class="form-control" placeholder="CAP" ng-model="fields.cap">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control" placeholder="Comune" ng-model="fields.comune">
+          </div>
+          <div class="col-sm-1">
+            <input type="text" class="form-control" placeholder="Provincia" ng-model="fields.provincia">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-1">
+            <button type="submit" class="btn btn-success">Salva</button>
+          </div>
+          <div class="col-sm-1">
+            <button type="reset" class="btn btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
