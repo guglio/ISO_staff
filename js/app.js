@@ -11,12 +11,12 @@ var app = angular.module('app', ['ngRoute'])
           when('/new_dipendente',
             {
               templateUrl: 'views/dipendente.html',
-              controller: 'NewCtrl'
+              controller: 'NewDipendenteCtrl'
             }).
           when('/new_corso',
             {
               templateUrl: 'views/corso.html',
-              controller: 'NewCtrl'
+              controller: 'NewCorsoCtrl'
             }).
           when('/',
             {
@@ -55,15 +55,56 @@ var app = angular.module('app', ['ngRoute'])
 
       $scope.orderProp = "value.cognome";
       $scope.asc = false;
-
   })
-  .controller('NewCtrl', function($scope, $http){
+  .controller('NewDipendenteCtrl', function($scope, $http){
     $scope.submitMyForm = function(){
         /* while compiling form , angular created this object*/
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
+        $scope.fields.type = "dipendente";
         var data = $scope.fields;
-        /* post to server*/
         console.log(data);
+        /* post to server*/
         $http.post(urlDB+'/ciam', data);
+    };
+  })
+  .controller('NewCorsoCtrl', function($scope, $http){
+    current_date = new Date();
+    $scope.rapporto_placeholder = "xx/"+ current_date.getFullYear();
+    $scope.submitMyForm = function(){
+        if($scope.partecipanti && $scope.docenti){
+          $scope.fields.partecipanti = $scope.partecipanti;
+          $scope.fields.docenti = $scope.docenti;
+        }
+        $scope.fields.type = "corso";
+        var data = $scope.fields;
+        console.log(data);
+        /* post to server*/
+        $http.post(urlDB+'/ciam', data);
+    };
+    
+
+    $scope.addPartecipante = function(){
+      if(!$scope.partecipanti)
+        $scope.partecipanti = [];
+      $scope.partecipanti.push({nome:$scope.par.nome,cognome:$scope.par.cognome,mansione:$scope.par.mansione,risultato:"Positivo",data:$scope.fields.data});
+      console.log($scope.partecipanti);
+      $scope.num_partecipanti = $scope.partecipanti.length;
+
+      $scope.par.nome = '';
+      $scope.par.cognome = '';
+      $scope.par.mansione = '';
+    };
+    $scope.removePartecipante = function(){
+      $scope.partecipanti.pop({nome:$scope.par.nome,cognome:$scope.par.cognome,mansione:$scope.par.mansione,risultato:$scope.par.risultato});
+      $scope.num_partecipanti = $scope.partecipanti.length;
     }
+    $scope.addRow = function() {
+      if(!$scope.docenti)
+        $scope.docenti = [];
+      $scope.docenti.push({ nome: $scope.doc.nome, cognome: $scope.doc.cognome, mansione: $scope.doc.mansione });
+      $scope.doc.nome = '';
+      $scope.doc.cognome = '';
+      $scope.doc.mansione = '';
+    }
+
   });
