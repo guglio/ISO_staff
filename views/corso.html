@@ -76,7 +76,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" class="form-control" placeholder="Cognome" ng-model="doc.cognome"></td>
+              <td><input type="text" class="form-control" placeholder="Cognome" ng-model="doc.cognome" auto-complete ui-items="personale.cognome"></td>
               <td><input type="text" class="form-control" placeholder="Nome" ng-model="doc.nome"></td>
               <td><input type="text" class="form-control" placeholder="Mansione" ng-model="doc.mansione"></td>
               <td><span class="glyphicon glyphicon-plus" ng-click="addRow()"></span></td>
