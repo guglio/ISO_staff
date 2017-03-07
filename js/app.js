@@ -47,16 +47,18 @@ var app = angular.module('app', ['ngRoute'])
             }
           });
   })
-  .controller('AllCtrl', function($scope, $http) {
+  .controller('AllCtrl', function($scope, $http, Personale) {
     $http.get(urlDB+'/ciam/_design/all/_view/all')
          .then(function(res){
-            $scope.personale = res.data.rows;
+            Personale.addNew(res.data.rows);
+            $scope.personale = Personale.getValues();
           });
+
 
       $scope.orderProp = "value.cognome";
       $scope.asc = false;
   })
-  .controller('NewDipendenteCtrl', function($scope, $http){
+  .controller('NewDipendenteCtrl', function($scope, $http, Personale){
     $scope.submitMyForm = function(){
         /* while compiling form , angular created this object*/
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
@@ -67,7 +69,7 @@ var app = angular.module('app', ['ngRoute'])
         $http.post(urlDB+'/ciam', data);
     };
   })
-  .controller('NewCorsoCtrl', function($scope, $http){
+  .controller('NewCorsoCtrl', function($scope, $http, Personale){
     current_date = new Date();
     $scope.rapporto_placeholder = "xx/"+ current_date.getFullYear();
     $scope.submitMyForm = function(){
@@ -81,7 +83,7 @@ var app = angular.module('app', ['ngRoute'])
         /* post to server*/
         $http.post(urlDB+'/ciam', data);
     };
-    
+    console.log(Personale.getValues());
 
     $scope.addPartecipante = function(){
       if(!$scope.partecipanti)
@@ -107,4 +109,27 @@ var app = angular.module('app', ['ngRoute'])
       $scope.doc.mansione = '';
     }
 
+  })
+  .factory('Personale', function(){
+    var personale = {};
+    return{
+      getValues: function(){
+        return personale;
+      },
+      addNew : function(entry){
+        personale = entry;
+      }
+    }
   });
+//   .directive('autoComplete', function($timeout) {
+//     return function(scope, iElement, iAttrs) {
+//             iElement.autocomplete({
+//                 source: scope[iAttrs.uiItems],
+//                 select: function() {
+//                     $timeout(function() {
+//                       iElement.trigger('input');
+//                     }, 0);
+//                 }
+//             });
+//     };
+// });
