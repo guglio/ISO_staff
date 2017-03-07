@@ -4,89 +4,134 @@
       <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Back</a></li>
       <li><h1 class="text-center">Dati nuovo corso di formazione</h1></li>
     </ul>
-    <h3 class="text-center">Dati anagrafici</h3>
+    <h3 class="text-center">Rapporto di addestramento</h3>
     <div class="row">
       <form class="form-horizontal" ng-submit="submitMyForm()">
         <div class="form-group">
-          <label for="nome" class="col-sm-2 control-label">Nome</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" placeholder="Nome" ng-model="fields.nome">
+          <label for="nome" class="col-sm-2 control-label">Rapporto n°:</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="nome" placeholder="{{rapporto_placeholder}}" ng-model="fields.num_addestramento">
+          </div>
+          <label for="nome" class="col-sm-2 control-label">Data</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" id="nome" placeholder="Nome" ng-model="fields.data">
           </div>
         </div>
         <div class="form-group">
-          <label for="cognome" class="col-sm-2 control-label">Cognome</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="cognome" placeholder="Cognome" ng-model="fields.cognome">
+          <label for="cognome" class="col-sm-2 control-label">Data inizio corso</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" placeholder="Cognome" ng-model="fields.data_inizio">
+          </div>
+          <label for="cognome" class="col-sm-2 control-label">Data fine corso</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" placeholder="Cognome" ng-model="fields.data_fine">
           </div>
         </div>
         <div class="form-group">
-          <label for="nascita" class="col-sm-2 control-label">Data di nascita</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" id="nascita" placeholder="Data di nascita (gg/mm/aaaa)"  ng-model="fields.data_nascita">
+          <label for="cognome" class="col-sm-2 control-label">Numero partecipanti</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" placeholder="0" ng-model="num_partecipanti" value="{{num_partecipanti}}" readonly="">
           </div>
         </div>
         <div class="form-group">
-          <label for="comune_nascita" class="col-sm-2 control-label">Comune di nascita</label>
+          <label for="cognome" class="col-sm-2 control-label">Materiale didattico</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="comune_nascita" placeholder="Comune di nascita" ng-model="fields.comune_nascita">
+            <input type="text" class="form-control" placeholder="Materiale didattico" ng-model="fields.documentazione">
+          </div>
+        </div>
+        <h3 class="text-center">Nominativi dei partecipanti</h3>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Cognome</th>
+            <th>Nome</th>
+            <th>Mansione</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" class="form-control" placeholder="Cognome" ng-model="par.cognome"></td>
+              <td><input type="text" class="form-control" placeholder="Nome" ng-model="par.nome"></td>
+              <td><input type="text" class="form-control" placeholder="Mansione" ng-model="par.mansione"></td>
+              <td><span class="glyphicon glyphicon-plus" ng-click="addPartecipante()"></span></td>
+            </tr>
+            <tr ng-repeat="partecipante in partecipanti">
+              <td>{{partecipante.cognome}}</td>
+              <td>{{partecipante.nome}}</td>
+              <td>{{partecipante.mansione}}</td>
+              <td><span class="glyphicon glyphicon-minus" ng-click="removePartecipante()"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 class="text-center">Nominativi dei Docenti</h3>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Cognome</th>
+            <th>Nome</th>
+            <th>Mansione</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" class="form-control" placeholder="Cognome" ng-model="doc.cognome"></td>
+              <td><input type="text" class="form-control" placeholder="Nome" ng-model="doc.nome"></td>
+              <td><input type="text" class="form-control" placeholder="Mansione" ng-model="doc.mansione"></td>
+              <td><span class="glyphicon glyphicon-plus" ng-click="addRow()"></span></td>
+            </tr>
+            <tr ng-repeat="doc in docenti">
+              <td>{{doc.cognome}}</td>
+              <td>{{doc.nome}}</td>
+              <td>{{doc.mansione}}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Attività ogetto del corso di formazione</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="5"></textarea>
           </div>
         </div>
         <div class="form-group">
-          <label for="cf" class="col-sm-2 control-label">Codice Fiscale</label>
+          <label for="cognome" class="col-sm-2 control-label">Argomenti trattati</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cf" placeholder="Codice Fiscale" ng-model="fields.cod_fiscale">
+            <textarea class="form-control" rows="5"></textarea>
           </div>
         </div>
         <div class="form-group">
-          <label for="cantiere" class="col-sm-2 control-label">Cantiere</label>
+          <label for="cognome" class="col-sm-2 control-label">Metodo di verifica</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cantiere" placeholder="Cantiere" ng-model="fields.cantiere">
+            <textarea class="form-control" rows="5"></textarea>
           </div>
         </div>
-        <div class="form-group">
-          <label for="qualifica" class="col-sm-2 control-label">Qualifica</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="qualifica" placeholder="Qualifica" ng-model="fields.qualifica">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="cod_dipendente" class="col-sm-2 control-label">Codice Dipendente</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="cod_dipendente" placeholder="Codice Dipendente" ng-model="fields.cod_dipendente">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="assunzione" class="col-sm-2 control-label">Data assunzione</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" id="assunzione" placeholder="Data Assunzione (gg/mm/aaaa)" ng-model="fields.data_assunzione">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="cod_contratto" class="col-sm-2 control-label">Codice Contratto</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="ccod_contrattof" placeholder="Codice Contratto" ng-model="fields.cod_contratto">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="temp_contratto" class="col-sm-2 control-label">Contratto a tempo</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="temp_contratto" placeholder="Tempo indeterminato / etc" ng-model="fields.contratto_tempo">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">Indirizzo</label>
-          <div class="col-sm-6">
-            <input type="text" class="form-control" placeholder="Via / Corso / Piazza n. 1" ng-model="fields.indirizzo">
-          </div>
-          <div class="col-sm-1">
-            <input type="text" class="form-control" placeholder="CAP" ng-model="fields.cap">
-          </div>
-          <div class="col-sm-2">
-            <input type="text" class="form-control" placeholder="Comune" ng-model="fields.comune">
-          </div>
-          <div class="col-sm-1">
-            <input type="text" class="form-control" placeholder="Provincia" ng-model="fields.provincia">
-          </div>
+        <div class="container-fluid" ng-show="num_partecipanti>0">
+          <h3 class="text-center">Risultati verifica</h3>
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Cognome</th>
+              <th>Nome</th>
+              <th>Risultato</th>
+              <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="partecipante in partecipanti">
+                <td>{{partecipante.cognome}}</td>
+                <td>{{partecipante.nome}}</td>
+                <td>
+                  <select ng-model="partecipante.risultato" class="form-control">
+                    <option>Positivo</option>
+                    <option>Negativo</option>
+                  </select>
+                </td>
+                <td>{{partecipante.data | date:'dd/MM/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-1">
