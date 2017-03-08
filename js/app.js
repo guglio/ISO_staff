@@ -1,4 +1,4 @@
-var urlDB = "http://127.0.0.1:5984";
+var urlDB = "http://localhost:5984";
 
 var app = angular.module('app', ['ngRoute'])
   .config(function ($routeProvider,$locationProvider) {
@@ -48,15 +48,15 @@ var app = angular.module('app', ['ngRoute'])
           });
   })
   .controller('AllCtrl', function($scope, $http, Personale) {
+
     $http.get(urlDB+'/ciam/_design/all/_view/all')
          .then(function(res){
             Personale.addNew(res.data.rows);
             $scope.personale = Personale.getValues();
           });
 
-
-      $scope.orderProp = "value.cognome";
-      $scope.asc = false;
+    $scope.orderProp = "value.cognome";
+    $scope.asc = false;
   })
   .controller('NewDipendenteCtrl', function($scope, $http, Personale){
     $scope.submitMyForm = function(){
@@ -69,8 +69,9 @@ var app = angular.module('app', ['ngRoute'])
         $http.post(urlDB+'/ciam', data);
     };
   })
-  .controller('NewCorsoCtrl', function($scope, $http, Personale){
+  .controller('NewCorsoCtrl', function($scope, $http, Personale, $timeout){
     current_date = new Date();
+    $scope.fields = [];
     $scope.rapporto_placeholder = "xx/"+ current_date.getFullYear();
     $scope.submitMyForm = function(){
         if($scope.partecipanti && $scope.docenti){
@@ -83,7 +84,42 @@ var app = angular.module('app', ['ngRoute'])
         /* post to server*/
         $http.post(urlDB+'/ciam', data);
     };
-    console.log(Personale.getValues());
+
+    $scope.dip = Personale.getValues();
+
+    $scope.selection = [];
+    $scope.partecipanti = [];
+
+    $scope.addPartecipanti = function addPartecipanti(id){
+      var idx = $scope.selection.indexOf(id);
+      if(idx > -1){
+        $scope.selection.splice(idx,1);
+      }
+      else{
+          $scope.selection.push(id);
+      }
+    };
+    $scope.savePartecipanti = function(){
+
+      var dipendenti_n = $scope.dip.length;
+      var saved_n = $scope.selection.length;
+
+      if($scope.partecipanti)
+        $scope.partecipanti = [];
+
+        for(var i = 0; i < dipendenti_n; i++){
+          currentDip = $scope.dip[i];
+
+          for(var j = 0; j < saved_n; j++){
+            currentID = $scope.selection[j];
+            if(currentDip.id == currentID){
+
+              $scope.partecipanti.push({nome:currentDip.value.nome,cognome:currentDip.value.cognome,mansione:currentDip.value.qualifica,risultato:"Positivo",data:$scope.fields.data});
+            }
+          }
+        }
+        $scope.num_partecipanti = $scope.partecipanti.length;
+    };
 
     $scope.addPartecipante = function(){
       if(!$scope.partecipanti)
@@ -108,6 +144,19 @@ var app = angular.module('app', ['ngRoute'])
       $scope.doc.cognome = '';
       $scope.doc.mansione = '';
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   })
   .factory('Personale', function(){
