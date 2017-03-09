@@ -70,9 +70,11 @@ var app = angular.module('app', ['ngRoute'])
     };
   })
   .controller('NewCorsoCtrl', function($scope, $http, Personale, $timeout){
-    current_date = new Date();
+
     $scope.fields = [];
-    $scope.rapporto_placeholder = "xx/"+ current_date.getFullYear();
+    $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear();
+    $scope.dip = Personale.getValues();
+
     $scope.submitMyForm = function(){
         if($scope.partecipanti && $scope.docenti){
           $scope.fields.partecipanti = $scope.partecipanti;
@@ -81,16 +83,19 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.type = "corso";
         var data = $scope.fields;
         console.log(data);
-        /* post to server*/
         $http.post(urlDB+'/ciam', data);
     };
 
-    $scope.dip = Personale.getValues();
+
 
     $scope.selection = [];
     $scope.partecipanti = [];
 
-    $scope.addPartecipanti = function addPartecipanti(id){
+    $scope.selectionDoc = [];
+    $scope.docenti = [];
+
+    $scope.addPartecipanti = function addPartecipanti(id,type){
+
       var idx = $scope.selection.indexOf(id);
       if(idx > -1){
         $scope.selection.splice(idx,1);
@@ -99,19 +104,21 @@ var app = angular.module('app', ['ngRoute'])
           $scope.selection.push(id);
       }
     };
-    $scope.savePartecipanti = function(){
+    $scope.savePersone = function savePersone(type){
 
-      var dipendenti_n = $scope.dip.length;
-      var saved_n = $scope.selection.length;
+      if(type == "partecipante"){
+        var dipendenti_n = $scope.dip.length;
+        var saved_n = $scope.selection.length;
 
-      if($scope.partecipanti)
-        $scope.partecipanti = [];
+        if($scope.partecipanti)
+          $scope.partecipanti = [];
 
         for(var i = 0; i < dipendenti_n; i++){
           currentDip = $scope.dip[i];
 
           for(var j = 0; j < saved_n; j++){
             currentID = $scope.selection[j];
+
             if(currentDip.id == currentID){
 
               $scope.partecipanti.push({nome:currentDip.value.nome,cognome:currentDip.value.cognome,mansione:currentDip.value.qualifica,risultato:"Positivo",data:$scope.fields.data});
@@ -119,32 +126,19 @@ var app = angular.module('app', ['ngRoute'])
           }
         }
         $scope.num_partecipanti = $scope.partecipanti.length;
+      }
+      if(type == "docente"){
+        var docenti_n = $scope.docenti;
+      }
     };
 
-    $scope.addPartecipante = function(){
-      if(!$scope.partecipanti)
-        $scope.partecipanti = [];
-      $scope.partecipanti.push({nome:$scope.par.nome,cognome:$scope.par.cognome,mansione:$scope.par.mansione,risultato:"Positivo",data:$scope.fields.data});
-      console.log($scope.partecipanti);
-      $scope.num_partecipanti = $scope.partecipanti.length;
 
-      $scope.par.nome = '';
-      $scope.par.cognome = '';
-      $scope.par.mansione = '';
-    };
-    $scope.removePartecipante = function(){
-      $scope.partecipanti.pop({nome:$scope.par.nome,cognome:$scope.par.cognome,mansione:$scope.par.mansione,risultato:$scope.par.risultato});
-      $scope.num_partecipanti = $scope.partecipanti.length;
-    }
-    $scope.addRow = function() {
-      if(!$scope.docenti)
-        $scope.docenti = [];
-      $scope.docenti.push({ nome: $scope.doc.nome, cognome: $scope.doc.cognome, mansione: $scope.doc.mansione });
-      $scope.doc.nome = '';
-      $scope.doc.cognome = '';
-      $scope.doc.mansione = '';
-    }
 
+    $scope.$watch('fields.data', function() {
+      var dipendenti_n = $scope.partecipanti.length;
+      for(var i = 0; i < dipendenti_n; i++)
+        $scope.partecipanti[i].data = $scope.fields.data;
+    });
 
 
 
@@ -170,15 +164,3 @@ var app = angular.module('app', ['ngRoute'])
       }
     }
   });
-//   .directive('autoComplete', function($timeout) {
-//     return function(scope, iElement, iAttrs) {
-//             iElement.autocomplete({
-//                 source: scope[iAttrs.uiItems],
-//                 select: function() {
-//                     $timeout(function() {
-//                       iElement.trigger('input');
-//                     }, 0);
-//                 }
-//             });
-//     };
-// });
