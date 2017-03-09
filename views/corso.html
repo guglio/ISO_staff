@@ -67,7 +67,7 @@
             <textarea class="form-control" rows="5"></textarea>
           </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" ng-show="num_docenti>0">
           <h3 class="text-center">Nominativi dei Docenti</h3>
           <table class="table table-hover">
             <thead>
@@ -119,54 +119,76 @@
             <button type="submit" class="btn btn-success">Salva</button>
           </div>
           <div class="col-sm-1">
-            <button type="reset" class="btn btn btn-danger">Reset</button>
+            <button type="reset" class="btn btn btn-danger" ng-click="resetForm()">Reset</button>
           </div>
         </div>
       </form>
-
-
-
-
-
-
-      <!-- Modal -->
-      <div class="modal fade" id="modalPartecipanti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePartecipanti"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Elenco dipendenti</h4>
-              <label for="searchForm">Search: </label>
-              <input type="text" class="form-control" ng-model="search.$" id="searchForm">
-              <button ng-click="savePersone('partecipante')" data-dismiss="modal">Salva</button>
-            </div>
-            <div class="modal-body">
-              <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th></th>
-                  <th>Cognome</th>
-                  <th>Nome</th>
-                  <th>Cantiere</th>
+    </div>
+  </div>
+  <!-- Modal Partecipanti-->
+  <div class="modal fade" id="modalPartecipanti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePartecipanti"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Elenco dipendenti</h4>
+          <label for="searchForm">Search: </label>
+          <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+          <button ng-click="savePersone('partecipanti')" data-dismiss="modal">Salva</button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th></th>
+              <th>Cognome</th>
+              <th>Nome</th>
+              <th>Cantiere</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="dipendente in dip | filter:search:strict | orderBy: orderProp : asc">
+                <td><input type="checkbox" value="{{dipendente.id}}" ng-checked="selection.indexOf(dipendente.id,'partecipante') > -1" ng-click="addPartecipanti(dipendente.id,'partecipante')"></td>
+                <td>{{dipendente.value.cognome}}</td>
+                <td>{{dipendente.value.nome}}</td>
+                <td>{{dipendente.value.cantiere}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Docenti-->
+    <div class="modal fade" id="modalDocenti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePartecipanti"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Elenco dipendenti</h4>
+            <label for="searchForm">Search: </label>
+            <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+            <button ng-click="savePersone('docenti')" data-dismiss="modal">Salva</button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th></th>
+                <th>Cognome</th>
+                <th>Nome</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="docente in docs | filter:search:strict | orderBy: orderProp : asc">
+                  <td><input type="checkbox" value="{{docente.id}}" ng-checked="selectionDoc.indexOf(docente.id,'docente') > -1" ng-click="addPartecipanti(docente.id,'docente')"></td>
+                  <td>{{docente.value.cognome}}</td>
+                  <td>{{docente.value.nome}}</td>
                 </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="dipendente in dip | filter:search:strict | orderBy: orderProp : asc">
-                    <td><input type="checkbox" value="{{dipendente.id}}" ng-checked="selection.indexOf(dipendente.id,'partecipante') > -1" ng-click="addPartecipanti(dipendente.id,'partecipante')"></td>
-                    <td>{{dipendente.value.cognome}}</td>
-                    <td>{{dipendente.value.nome}}</td>
-                    <td>{{dipendente.value.cantiere}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            </div>
+              </tbody>
+            </table>
+          </div>
           </div>
         </div>
       </div>
-
-
-
-
-
-    </div>
+</div>

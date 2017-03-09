@@ -51,12 +51,21 @@ var app = angular.module('app', ['ngRoute'])
 
     $http.get(urlDB+'/ciam/_design/all/_view/all')
          .then(function(res){
-            Personale.addNew(res.data.rows);
-            $scope.personale = Personale.getValues();
+            Personale.addNewPersonale(res.data.rows);
+            $scope.personale = Personale.getPersonale();
           });
 
     $scope.orderProp = "value.cognome";
     $scope.asc = false;
+    $scope.personale = [];
+
+    $scope.$watch('personale', function() {
+      for(var i = 0; i < $scope.personale.length; i++){
+        if($scope.personale[i].value.docente)
+          Personale.addNewDocente($scope.personale[i]);
+      }
+    });
+
   })
   .controller('NewDipendenteCtrl', function($scope, $http, Personale){
     $scope.submitMyForm = function(){
@@ -67,14 +76,18 @@ var app = angular.module('app', ['ngRoute'])
         console.log(data);
         /* post to server*/
         $http.post(urlDB+'/ciam', data);
+        //
+        //todo: add to Personale, so globally is loaded!
+        //
     };
   })
   .controller('NewCorsoCtrl', function($scope, $http, Personale, $timeout){
 
     $scope.fields = [];
     $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear();
-    $scope.dip = Personale.getValues();
-
+    $scope.dip = Personale.getPersonale();
+    $scope.docs = Personale.getDocenti();
+    console.log(Personale.getDocenti());
     $scope.submitMyForm = function(){
         if($scope.partecipanti && $scope.docenti){
           $scope.fields.partecipanti = $scope.partecipanti;
@@ -95,18 +108,36 @@ var app = angular.module('app', ['ngRoute'])
     $scope.docenti = [];
 
     $scope.addPartecipanti = function addPartecipanti(id,type){
-
-      var idx = $scope.selection.indexOf(id);
-      if(idx > -1){
-        $scope.selection.splice(idx,1);
+      if(type === 'partecipante'){
+        var idx = $scope.selection.indexOf(id);
+        if(idx > -1){
+          $scope.selection.splice(idx,1);
+        }
+        else{
+            $scope.selection.push(id);
+        }
       }
-      else{
-          $scope.selection.push(id);
+      if(type === 'docente'){
+        var idx = $scope.selectionDoc.indexOf(id);
+        if(idx > -1){
+          $scope.selectionDoc.splice(idx,1);
+        }
+        else{
+            $scope.selectionDoc.push(id);
+        }
       }
+    };
+    $scope.resetForm = function(){
+      $scope.selection = [];
+      $scope.partecipanti = [];
+      $scope.selectionDoc = [];
+      $scope.docenti = [];
+      $scope.num_partecipanti = 0;
+      $scope.num_docenti = 0;
     };
     $scope.savePersone = function savePersone(type){
 
-      if(type == "partecipante"){
+      if(type == "partecipanti"){
         var dipendenti_n = $scope.dip.length;
         var saved_n = $scope.selection.length;
 
@@ -127,8 +158,28 @@ var app = angular.module('app', ['ngRoute'])
         }
         $scope.num_partecipanti = $scope.partecipanti.length;
       }
-      if(type == "docente"){
-        var docenti_n = $scope.docenti;
+      if(type == "docenti"){
+        var docenti_n = $scope.docs.length;
+        var saved_n = $scope.selectionDoc.length;
+
+        if($scope.docenti)
+          $scope.docenti = [];
+
+        for(var i = 0; i < docenti_n; i++){
+          currentDoc = $scope.docs[i];
+
+          for(var j = 0; j < saved_n; j++){
+            currentID = $scope.selectionDoc[j];
+
+            if(currentDoc.id == currentID){
+
+              $scope.docenti.push({nome:currentDoc.value.nome,cognome:currentDoc.value.cognome});
+            }
+          }
+        }
+        $scope.num_docenti = $scope.docenti.length;
+        console.log($scope.num_docenti);
+        console.log($scope.docenti);
       }
     };
 
@@ -155,12 +206,19 @@ var app = angular.module('app', ['ngRoute'])
   })
   .factory('Personale', function(){
     var personale = {};
+    var docenti = [];
     return{
-      getValues: function(){
+      getPersonale: function(){
         return personale;
       },
-      addNew : function(entry){
+      getDocenti: function(){
+        return docenti;
+      },
+      addNewPersonale : function(entry){
         personale = entry;
+      },
+      addNewDocente : function(entry){
+        docenti.push(entry);
       }
     }
   });
