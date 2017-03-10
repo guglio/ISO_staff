@@ -87,7 +87,7 @@ var app = angular.module('app', ['ngRoute'])
     $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear();
     $scope.dip = Personale.getPersonale();
     $scope.docs = Personale.getDocenti();
-    console.log(Personale.getDocenti());
+
     $scope.submitMyForm = function(){
         if($scope.partecipanti && $scope.docenti){
           $scope.fields.partecipanti = $scope.partecipanti;
@@ -96,7 +96,7 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.type = "corso";
         var data = $scope.fields;
         console.log(data);
-        $http.post(urlDB+'/ciam', data);
+        //$http.post(urlDB+'/ciam', data);
     };
 
 
@@ -152,7 +152,7 @@ var app = angular.module('app', ['ngRoute'])
 
             if(currentDip.id == currentID){
 
-              $scope.partecipanti.push({nome:currentDip.value.nome,cognome:currentDip.value.cognome,mansione:currentDip.value.qualifica,risultato:"Positivo",data:$scope.fields.data});
+              $scope.partecipanti.push({nome:currentDip.value.nome,cognome:currentDip.value.cognome,mansione:currentDip.value.qualifica,risultato:"Positivo",data:$scope.fields.data,id:currentDip.id});
             }
           }
         }
@@ -173,13 +173,11 @@ var app = angular.module('app', ['ngRoute'])
 
             if(currentDoc.id == currentID){
 
-              $scope.docenti.push({nome:currentDoc.value.nome,cognome:currentDoc.value.cognome});
+              $scope.docenti.push({nome:currentDoc.value.nome,cognome:currentDoc.value.cognome,id:currentDoc.id});
             }
           }
         }
         $scope.num_docenti = $scope.docenti.length;
-        console.log($scope.num_docenti);
-        console.log($scope.docenti);
       }
     };
 
