@@ -179,6 +179,7 @@ var app = angular.module('app', ['ngRoute'])
         }
         $scope.num_docenti = $scope.docenti.length;
       }
+      $scope.search = "";
     };
 
 
