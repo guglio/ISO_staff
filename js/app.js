@@ -136,7 +136,7 @@ var app = angular.module('app', ['ngRoute'])
       $scope.num_docenti = 0;
     };
     $scope.savePersone = function savePersone(type){
-
+      console.log($scope.search);
       if(type == "partecipanti"){
         var dipendenti_n = $scope.dip.length;
         var saved_n = $scope.selection.length;
@@ -179,7 +179,7 @@ var app = angular.module('app', ['ngRoute'])
         }
         $scope.num_docenti = $scope.docenti.length;
       }
-      $scope.search = "";
+      $scope.search = null;
     };
 
 
