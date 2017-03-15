@@ -77,13 +77,13 @@ var app = angular.module('app', ['ngRoute'])
         /* post to server*/
         $http.post(urlDB+'/ciam', data);
         //
-        //todo: add to Personale, so globally is loaded!
+        //todo: add to Personale or reload it, so it's updated globally!
         //
     };
   })
-  .controller('NewCorsoCtrl', function($scope, $http, Personale, $timeout){
+  .controller('NewCorsoCtrl', function($scope, $http, Personale){
 
-    $scope.fields = [];
+    $scope.fields = {};
     $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear();
     $scope.dip = Personale.getPersonale();
     $scope.docs = Personale.getDocenti();
@@ -95,8 +95,32 @@ var app = angular.module('app', ['ngRoute'])
         }
         $scope.fields.type = "corso";
         var data = $scope.fields;
-        console.log(data);
-        //$http.post(urlDB+'/ciam', data);
+
+        $http.post(urlDB+'/ciam', data)
+          .then(function(response){
+            var corso_id = response.data.id;
+
+            for (var i=0;i<$scope.num_partecipanti;i++){
+
+              var url = urlDB+'/ciam/'+$scope.partecipanti[i].id;
+
+              $http.get(url)
+                .then(function(utente){
+                  if(utente.status == 200){
+                      if(!utente.data.corsi)
+                        utente.data.corsi = [];
+                      utente.data.corsi.push({id:corso_id});
+                      delete utente.data._id;
+                      console.log("Utente");
+                      console.log(utente);
+                      console.log("Utente.data");
+                      console.log(utente.data);
+                      $http.put(url,utente.data);
+                  }
+                });
+            }
+          });
+
     };
 
 
@@ -136,7 +160,7 @@ var app = angular.module('app', ['ngRoute'])
       $scope.num_docenti = 0;
     };
     $scope.savePersone = function savePersone(type){
-      console.log($scope.search);
+
       if(type == "partecipanti"){
         var dipendenti_n = $scope.dip.length;
         var saved_n = $scope.selection.length;
