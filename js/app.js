@@ -32,15 +32,14 @@ var app = angular.module('app', ['ngRoute'])
          .then(function(res){
             $scope.dipendente = res.data;
             if(!$scope.dipendente.corsi)
-              return;
+              console.log("Error");
             else{
-            var corsi = "[";
+            var corsi = [];
               angular.forEach($scope.dipendente.corsi, function(value, key){
-                corsi += "\""+value.id+"\""+",";
+                corsi.push(value.id);
               });
-              corsi = corsi.slice(0, -1);
-              corsi += "]";
-              $http.get(urlDB+'/corsi_formazione/_all_docs?keys='+corsi+"&include_docs=true").
+
+              $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":corsi}).
                 then(function(res){
                   $scope.corsi = res.data.rows;
                 });
@@ -99,26 +98,38 @@ var app = angular.module('app', ['ngRoute'])
         $http.post(urlDB+'/ciam', data)
           .then(function(response){
             var corso_id = response.data.id;
-
+            var ids = [];
             for (var i=0;i<$scope.num_partecipanti;i++){
 
               var url = urlDB+'/ciam/'+$scope.partecipanti[i].id;
-
-              $http.get(url)
-                .then(function(utente){
-                  if(utente.status == 200){
-                      if(!utente.data.corsi)
-                        utente.data.corsi = [];
-                      utente.data.corsi.push({id:corso_id});
-                      delete utente.data._id;
-                      console.log("Utente");
-                      console.log(utente);
-                      console.log("Utente.data");
-                      console.log(utente.data);
-                      $http.put(url,utente.data);
-                  }
-                });
+              ids.push($scope.partecipanti[i].id);
+              // $http.get(url)
+              //   .then(function(utente){
+              //     if(utente.status == 200){
+              //         if(!utente.data.corsi)
+              //           utente.data.corsi = [];
+              //         utente.data.corsi.push({id:corso_id});
+              //         delete utente.data._id;
+              //         $http.put(url,utente.data);
+              //     }
+              //   });
             }
+            $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":ids}).then(function(what){
+              // console.log(what.data.rows);
+              // console.log(what);
+              var dipendentiUpdate = [];
+
+              for(var j=0;j<what.data.rows.length;j++){
+                dipendentiUpdate.push(what.data.rows[j].doc);
+                if(!dipendentiUpdate[j].corsi)
+                  dipendentiUpdate[j].corsi = [];
+                dipendentiUpdate[j].corsi.push({id:corso_id});
+              }
+              console.log(dipendentiUpdate);
+              $http.post(urlDB+'/ciam/_bulk_docs',{"docs":dipendentiUpdate}).then(function(wtf){
+                console.log(wtf);
+              });
+            });
           });
 
     };

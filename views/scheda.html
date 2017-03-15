@@ -34,7 +34,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="corso in corsi">
-          <td>{{corso.doc.data}}</td>
+          <td>{{corso.doc.data | date : 'dd/MM/yyyy'}}</td>
           <td>{{corso.doc.numero_addestramento}}</td>
           <td>{{corso.doc.argomenti}}</td>
           <td>{{corso.doc.durata}}</td>
