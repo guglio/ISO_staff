@@ -25,6 +25,11 @@ var app = angular.module('app', ['ngRoute'])
               templateUrl: 'views/all.html',
               controller: 'AllCtrl'
             }).
+          when('/corsi',
+            {
+                templateUrl: 'views/courses.html',
+                controller: 'CorsiCtrl'
+            }).
           otherwise({ //fallback view
             redirectTo: '/'
           });
@@ -148,6 +153,7 @@ var app = angular.module('app', ['ngRoute'])
               for (var i=0;i<$scope.num_partecipanti;i++){
                 ids.push($scope.partecipanti[i].id); // populate the array
               }
+              console.log(ids);
               // request documents with the corresponding participants id
               $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":ids}).then(
                 function successCallback(response) {
@@ -276,6 +282,25 @@ var app = angular.module('app', ['ngRoute'])
       for(var i = 0; i < dipendenti_n; i++)
         $scope.partecipanti[i].data = $scope.fields.data;
     });
+  })
+
+
+
+  // controller to fetch and display the courses data inside a table
+  .controller('CorsiCtrl', function($scope, $http, Personale) {
+    // request to server for the courses data.
+    $http.get(urlDB+'/ciam/_design/all/_view/corso?include_docs=true')
+      .then(
+           function successCallback(response) {
+             console.log(response.data.rows);
+             // save locally to $scope the data
+             $scope.courses = response.data.rows;
+            },
+            function errorCallback(response) {
+              console.log("Error "+response.status+" - "+response.statusText);
+            }
+        );
+    $scope.courses = []; // initialize the array empty
   })
 
 
