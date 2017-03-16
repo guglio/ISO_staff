@@ -48,7 +48,7 @@ var app = angular.module('app', ['ngRoute'])
                 $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":corsi}).
                   then(
                     function successCallback(response) {
-                      $scope.corsi = res.data.rows; // save the courses details inside "corsi", to render the inside the view
+                      $scope.corsi = response.data.rows; // save the courses details inside "corsi", to render the inside the view
                     },
                     function errorCallback(response) {
                       console.log("Error "+response.status+" - "+response.statusText);
