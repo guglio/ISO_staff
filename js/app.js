@@ -5,7 +5,7 @@ var urlDB = "http://localhost:5984/ciam";
 var app = angular.module('app', ['ngRoute'])
   .config(function ($routeProvider,$locationProvider) {
       $routeProvider.
-          when('/ciam/:id', //routes for detail view of employee
+          when('/dipendente/:id', //routes for detail view of employee
             {
               templateUrl: 'views/scheda.html',
               controller: 'SchedaCtrl'
@@ -20,7 +20,7 @@ var app = angular.module('app', ['ngRoute'])
               templateUrl: 'views/corso.html',
               controller: 'NewCorsoCtrl'
             }).
-          when('/', //table view of all the employees
+          when('/dipendenti', //table view of all the employees
             {
               templateUrl: 'views/all.html',
               controller: 'AllCtrl'
@@ -34,6 +34,11 @@ var app = angular.module('app', ['ngRoute'])
             {
               templateUrl: 'views/course_detail.html',
               controller: 'CourseDetailCtrl'
+            }).
+          when('/', //table view of all the employees
+            {
+              templateUrl: 'views/index.html'
+              // controller: 'AllCtrl'
             }).
           otherwise({ //fallback view
             redirectTo: '/'
