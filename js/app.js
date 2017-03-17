@@ -1,5 +1,5 @@
 //URL of the CouchDB server
-var urlDB = "http://localhost:5984";
+var urlDB = "http://localhost:5984/ciam";
 
 // initialize the app
 var app = angular.module('app', ['ngRoute'])
@@ -30,6 +30,11 @@ var app = angular.module('app', ['ngRoute'])
                 templateUrl: 'views/courses.html',
                 controller: 'CorsiCtrl'
             }).
+          when('/course/:id', //routes for detail view of course
+            {
+              templateUrl: 'views/course_detail.html',
+              controller: 'CourseDetailCtrl'
+            }).
           otherwise({ //fallback view
             redirectTo: '/'
           });
@@ -40,7 +45,7 @@ var app = angular.module('app', ['ngRoute'])
   // controller to handle the detail view of employees.
   // I collect the URL id to determine the ID of the employee
   .controller("SchedaCtrl", function($scope, $http, $routeParams){
-    $http.get(urlDB+'/ciam/'+$routeParams.id) // get employee details
+    $http.get(urlDB+'/'+$routeParams.id) // get employee details
          .then(function successCallback(response) {
             $scope.dipendente = response.data; // save details to "dipendendente"
             if(!$scope.dipendente.corsi); // check if there are course to display
@@ -50,7 +55,7 @@ var app = angular.module('app', ['ngRoute'])
                   corsi.push(value.id); // loop and save courses inside the array "corsi"
                 });
                 // request to server for the details of the course
-                $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":corsi}).
+                $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":corsi}).
                   then(
                     function successCallback(response) {
                       $scope.corsi = response.data.rows; // save the courses details inside "corsi", to render the inside the view
@@ -71,7 +76,7 @@ var app = angular.module('app', ['ngRoute'])
     // I created a custom view to filter the employees
     // TODO: change the request url with something like {"key":["staff":true]} to avoid relying to a custom view
     // one other thing is that if there is a record without the value staff (but only "tutor"), it will be skipped.
-    $http.get(urlDB+'/ciam/_design/all/_view/all')
+    $http.get(urlDB+'/_design/all/_view/all')
          .then(
            function successCallback(response) {
              // save to factory variable, so I don't have to fetch everytime the employees data
@@ -108,7 +113,7 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.type = "employee"; // add the value employee to type
 
         // post the data to the server
-        $http.post(urlDB+'/ciam', $scope.fields).
+        $http.post(urlDB, $scope.fields).
           then(
               function successCallback(response) {
                 console.log("Data upload without errors");
@@ -145,7 +150,7 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.type = "corso"; // set the type of this record to "corso"
 
         // post data
-        $http.post(urlDB+'/ciam', $scope.fields)
+        $http.post(urlDB, $scope.fields)
           .then(
             function successCallback(response) {
               var corso_id = response.data.id; // get the "_id" of the course
@@ -155,7 +160,7 @@ var app = angular.module('app', ['ngRoute'])
               }
               console.log(ids);
               // request documents with the corresponding participants id
-              $http.post(urlDB+'/ciam/_all_docs?include_docs=true',{"keys":ids}).then(
+              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":ids}).then(
                 function successCallback(response) {
                   var dipendentiUpdate = []; // initialize empty array for the updated data
                   var n = response.data.rows.length;
@@ -166,7 +171,7 @@ var app = angular.module('app', ['ngRoute'])
                     dipendentiUpdate[j].corsi.push({id:corso_id}); // add the course id to the current document
                   }
                   // post the updated data to the database
-                  $http.post(urlDB+'/ciam/_bulk_docs',{"docs":dipendentiUpdate}).then(
+                  $http.post(urlDB+'/_bulk_docs',{"docs":dipendentiUpdate}).then(
                     function successCallback(response) {
                       console.log(response.status+" - "+response.statusText);
                       $scope.resetForm(); // reset form data
@@ -289,10 +294,9 @@ var app = angular.module('app', ['ngRoute'])
   // controller to fetch and display the courses data inside a table
   .controller('CorsiCtrl', function($scope, $http, Personale) {
     // request to server for the courses data.
-    $http.get(urlDB+'/ciam/_design/all/_view/corso?include_docs=true')
+    $http.get(urlDB+'/_design/all/_view/corso?include_docs=true')
       .then(
            function successCallback(response) {
-             console.log(response.data.rows);
              // save locally to $scope the data
              $scope.courses = response.data.rows;
             },
