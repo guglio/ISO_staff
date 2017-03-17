@@ -27,10 +27,10 @@
     </thead>
     <tbody>
       <tr ng-repeat="dipendente in personale | filter:search:strict | orderBy: orderProp : asc">
-        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.cognome}}</a></td>
-        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.nome}}</a></td>
-        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.cantiere}}</a></td>
-        <td><a href="/#!/ciam/{{dipendente.id}}">{{dipendente.value.qualifica}}</a></td>
+        <td><a href="/#!/dipendente/{{dipendente.id}}">{{dipendente.value.cognome}}</a></td>
+        <td><a href="/#!/dipendente/{{dipendente.id}}">{{dipendente.value.nome}}</a></td>
+        <td><a href="/#!/dipendente/{{dipendente.id}}">{{dipendente.value.cantiere}}</a></td>
+        <td><a href="/#!/dipendente/{{dipendente.id}}">{{dipendente.value.qualifica}}</a></td>
       </tr>
     </tbody>
   </table>
