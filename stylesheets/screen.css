@@ -6,3 +6,8 @@
 .container-fluid {
   max-width: 1200px;
 }
+
+/* line 9, ../sass/screen.scss */
+.row.buffer-top div {
+  margin-top: 2em;
+}
