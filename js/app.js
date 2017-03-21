@@ -79,8 +79,6 @@ var app = angular.module('app', ['ngRoute'])
   .controller('AllCtrl', function($scope, $http, Personale) {
     // request to server for the employees data.
     // I created a custom view to filter the employees
-    // TODO: change the request url with something like {"key":["staff":true]} to avoid relying to a custom view
-    // one other thing is that if there is a record without the value staff (but only "tutor"), it will be skipped.
     $http.get(urlDB+'/_design/all/_view/all')
          .then(
            function successCallback(response) {
