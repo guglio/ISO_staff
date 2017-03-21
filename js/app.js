@@ -5,40 +5,40 @@ var urlDB = "http://localhost:5984/ciam";
 var app = angular.module('app', ['ngRoute'])
   .config(function ($routeProvider,$locationProvider) {
       $routeProvider.
-          when('/dipendente/:id', //routes for detail view of employee
+          when('/', //table view of all the employees
             {
-              templateUrl: 'views/scheda.html',
-              controller: 'SchedaCtrl'
+              templateUrl: 'views/index.html',
+              controller:'IndexCtrl'
             }).
-          when('/new_dipendente', //view to create new employee
+          when('/new_employee', //view to create new employee
             {
-              templateUrl: 'views/dipendente.html',
-              controller: 'NewDipendenteCtrl'
+              templateUrl: 'views/new_employee.html',
+              controller: 'NewEmployeeCtrl'
             }).
-          when('/new_corso', //view to create new course
+          when('/new_course', //view to create new course
             {
-              templateUrl: 'views/corso.html',
-              controller: 'NewCorsoCtrl'
+              templateUrl: 'views/new_course.html',
+              controller: 'NewCourseCtrl'
             }).
-          when('/dipendenti', //table view of all the employees
+          when('/employees', //table view of all the employees
             {
-              templateUrl: 'views/all.html',
-              controller: 'AllCtrl'
+              templateUrl: 'views/employees.html',
+              controller: 'EmployeesCtrl'
             }).
-          when('/corsi',
+          when('/employee/:id', //routes for detail view of employee
+            {
+              templateUrl: 'views/employee.html',
+              controller: 'EmployeeCtrl'
+            }).
+          when('/courses',
             {
                 templateUrl: 'views/courses.html',
-                controller: 'CorsiCtrl'
+                controller: 'CoursesCtrl'
             }).
           when('/course/:id', //routes for detail view of course
             {
-              templateUrl: 'views/course_detail.html',
-              controller: 'CourseDetailCtrl'
-            }).
-          when('/', //table view of all the employees
-            {
-              templateUrl: 'views/index.html'
-              // controller: 'AllCtrl'
+              templateUrl: 'views/course.html',
+              controller: 'CourseCtrl'
             }).
           otherwise({ //fallback view
             redirectTo: '/'
@@ -49,7 +49,7 @@ var app = angular.module('app', ['ngRoute'])
 
   // controller to handle the detail view of employees.
   // I collect the URL id to determine the ID of the employee
-  .controller("SchedaCtrl", function($scope, $http, $routeParams){
+  .controller("EmployeeCtrl", function($scope, $http, $routeParams){
     $http.get(urlDB+'/'+$routeParams.id) // get employee details
          .then(function successCallback(response) {
             $scope.dipendente = response.data; // save details to "dipendendente"
@@ -72,39 +72,46 @@ var app = angular.module('app', ['ngRoute'])
             }
           });
   })
+  .controller('IndexCtrl', function($scope, $http, Personale){
 
-
-
-  // controller to fetch and display the employees data inside a table
-  .controller('AllCtrl', function($scope, $http, Personale, $route) {
+    if(!Personale.getPersonale().length){
     // request to server for the employees data.
     // I created a custom view to filter the employees
-    $http.get(urlDB+'/_design/all/_view/all')
-         .then(
-           function successCallback(response) {
-             // save to factory variable, so I don't have to fetch everytime the employees data
-              Personale.addNewPersonale(response.data.rows);
-              // save locally to $scope the data
-              $scope.personale = Personale.getPersonale();
-            },
-            function errorCallback(response) {
-              console.log("Error "+response.status+" - "+response.statusText);
-            }
-        );
-    // property used to change the order of employees (A->Z or Z->A)
-    $scope.orderProp = "value.cognome";
-    $scope.asc = false; // default A->Z
+    Personale.loadData();
+
+
     $scope.personale = []; // initialize the array empty
 
     // watch for changes to the array "personale", when changes are made,
     // search for the property "docente", and add to the factory variable "docenti" the current record
     $scope.$watch('personale', function() {
-      for(var i = 0; i < $scope.personale.length; i++){
+      for(var i = 0; i < Personale.getPersonale().length; i++){
         if($scope.personale[i].value.docente)
           Personale.addNewDocente($scope.personale[i]);
       }
-    });
+    });}
+  })
 
+
+  // controller to fetch and display the employees data inside a table
+  .controller('EmployeesCtrl', function($scope, $http, Personale, $route) {
+    // request to server for the employees data.
+    // I created a custom view to filter the employees
+
+              // save locally to $scope the data
+              $scope.personale = Personale.getPersonale();
+
+    // property used to change the order of employees (A->Z or Z->A)
+    $scope.orderProp = "value.cognome";
+    $scope.asc = false; // default A->Z
+
+
+    // watch for changes to the array "personale", when changes are made,
+    // search for the property "docente", and add to the factory variable "docenti" the current record
+
+
+
+    // function to relaod the current view, so the data it's updated
     $scope.reloadData = function(){
       $route.reload();
     };
@@ -113,7 +120,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to submit new employee to the database.
-  .controller('NewDipendenteCtrl', function($scope, $http, Personale){
+  .controller('NewEmployeeCtrl', function($scope, $http, Personale){
     $scope.submitMyForm = function(){
         // add the "nome_completo" var to the "fields" array
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
@@ -137,7 +144,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller that handle the add of new course
-  .controller('NewCorsoCtrl', function($scope, $http, Personale){
+  .controller('NewCourseCtrl', function($scope, $http, Personale){
 
     $scope.fields = {}; // initialize the fields object
     $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear(); // create a custom placeholder for the course internal ID
@@ -299,7 +306,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to fetch and display the courses data inside a table
-  .controller('CorsiCtrl', function($scope, $http, Personale) {
+  .controller('CoursesCtrl', function($scope, $http, Personale, $route) {
     // request to server for the courses data.
     $http.get(urlDB+'/_design/all/_view/corso?include_docs=true')
       .then(
@@ -312,14 +319,19 @@ var app = angular.module('app', ['ngRoute'])
             }
         );
     $scope.courses = []; // initialize the array empty
+    // function to relaod the current view, so the data it's updated
+    $scope.reloadData = function(){
+      $route.reload();
+    };
   })
 
 
 
   // factory to save globally the data (employees and tutors), to reduce calls to the database
-  .factory('Personale', function(){
+  .factory('Personale', function($http){
     var personale = {};
     var docenti = [];
+    var tutors = {};
     return{
       getPersonale: function(){
         return personale;
@@ -327,11 +339,23 @@ var app = angular.module('app', ['ngRoute'])
       getDocenti: function(){
         return docenti;
       },
-      addNewPersonale : function(entry){
-        personale = entry;
-      },
       addNewDocente : function(entry){
         docenti.push(entry);
+      },
+      addTutor : function(entry){
+        tutors = entry;
+      },
+      loadData: function(){
+        $http.get(urlDB+'/_design/all/_view/all')
+             .then(
+               function successCallback(response) {
+                 // save to factory variable, so I don't have to fetch everytime the employees data
+                  personale = response.data.rows;
+                },
+                function errorCallback(response) {
+                  console.log("Error "+response.status+" - "+response.statusText);
+                }
+            );
       }
     }
   });
