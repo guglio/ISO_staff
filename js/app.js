@@ -76,7 +76,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to fetch and display the employees data inside a table
-  .controller('AllCtrl', function($scope, $http, Personale) {
+  .controller('AllCtrl', function($scope, $http, Personale, $route) {
     // request to server for the employees data.
     // I created a custom view to filter the employees
     $http.get(urlDB+'/_design/all/_view/all')
@@ -104,6 +104,10 @@ var app = angular.module('app', ['ngRoute'])
           Personale.addNewDocente($scope.personale[i]);
       }
     });
+
+    $scope.reloadData = function(){
+      $route.reload();
+    };
   })
 
 
