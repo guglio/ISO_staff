@@ -1,0 +1,31 @@
+<div class="table-responsive container-fluid">
+  <ul class="pager">
+    <li class="previous"><a href="/"><span aria-hidden="true">&larr;</span> Back</a></li>
+    <li><h1 class="text-center">Tabella riassuntiva della formazione/addestramento attuati</h1></li>
+  </ul>
+  <div class="form-inline">
+      <label for="searchForm">Search: </label>
+      <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+      <a class="btn btn-default" role="button" ng-click="reloadData()">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+      </a>
+  </div>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Cognome <span class="glyphicon glyphicon-sort-by-alphabet" ng-click="asc = false"></span><span class="glyphicon glyphicon-sort-by-alphabet-alt" ng-click="asc = true"></span></th>
+      <th>Nome</th>
+      <th>Cantiere</th>
+      <th>Qualifica</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="dipendente in personale | filter:search:strict | orderBy: orderProp : asc">
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.cognome}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.nome}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.cantiere}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.qualifica}}</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
