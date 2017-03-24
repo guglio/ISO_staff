@@ -1,5 +1,6 @@
 //URL of the CouchDB server
 var urlDB = "http://localhost:5984/ciam";
+var modello_personale = {"modello_numero":"7.2.2.2","revisione":"00","data_revisione":"01/01/2017"};
 
 // initialize the app
 var app = angular.module('app', ['ngRoute'])
@@ -84,6 +85,10 @@ var app = angular.module('app', ['ngRoute'])
   // controller to handle the detail view of employees.
   // I collect the URL id to determine the ID of the employee
   .controller("EmployeeCtrl", function($scope, $http, $routeParams){
+    $scope.modello_num = modello_personale.modello_numero;
+    $scope.modello_revisione = modello_personale.revisione;
+    $scope.data_revisione_modello = modello_personale.data_revisione;
+
     $http.get(urlDB+'/'+$routeParams.id) // get employee details
          .then(function successCallback(response) {
             $scope.dipendente = response.data; // save details to "dipendendente"
