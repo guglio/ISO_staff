@@ -20,11 +20,11 @@
     </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="dipendente in personale | filter:search:strict | orderBy: orderProp : asc">
-        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.cognome}}</a></td>
-        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.nome}}</a></td>
-        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.cantiere}}</a></td>
-        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.value.qualifica}}</a></td>
+      <tr ng-repeat="dipendente in localData_employees | filter:search:strict | orderBy: orderProp : asc">
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.cognome}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.nome}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.cantiere}}</a></td>
+        <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.qualifica}}</a></td>
       </tr>
     </tbody>
   </table>

@@ -79,10 +79,10 @@
             </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="doc in docenti">
-                <td>{{doc.cognome}}</td>
-                <td>{{doc.nome}}</td>
-                <td>{{doc.mansione}}</td>
+              <tr ng-repeat="docente in fields.docenti">
+                <td>{{docente.cognome}}</td>
+                <td>{{docente.nome}}</td>
+                <td>{{docente.mansione}}</td>
                 <td></td>
               </tr>
             </tbody>
@@ -100,7 +100,7 @@
             </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="partecipante in partecipanti">
+              <tr ng-repeat="partecipante in fields.partecipanti">
                 <td>{{partecipante.cognome}}</td>
                 <td>{{partecipante.nome}}</td>
                 <td>
@@ -123,6 +123,9 @@
           </div>
         </div>
       </form>
+      <div>
+        <pre>{{fields | json}}</pre>
+      </div>
     </div>
   </div>
   <!-- Modal Partecipanti-->
@@ -130,10 +133,10 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePartecipanti"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Elenco dipendenti</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Elenco dipendenti</h4>
           <label for="searchForm">Search: </label>
-          <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+          <input type="text" class="form-control" ng-model="searchStaff.$">
           <button ng-click="savePersone('partecipanti')" data-dismiss="modal">Salva</button>
         </div>
         <div class="modal-body">
@@ -147,11 +150,11 @@
             </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="dipendente in dip | filter:search:strict | orderBy: orderProp : asc">
+              <tr ng-repeat="dipendente in localData_employees | filter:searchStaff:strict | orderBy: orderProp : asc">
                 <td><input type="checkbox" value="{{dipendente.id}}" ng-checked="selection.indexOf(dipendente.id,'partecipante') > -1" ng-click="addPartecipanti(dipendente.id,'partecipante')"></td>
-                <td>{{dipendente.value.cognome}}</td>
-                <td>{{dipendente.value.nome}}</td>
-                <td>{{dipendente.value.cantiere}}</td>
+                <td>{{dipendente.doc.cognome}}</td>
+                <td>{{dipendente.doc.nome}}</td>
+                <td>{{dipendente.doc.cantiere}}</td>
               </tr>
             </tbody>
           </table>
@@ -164,10 +167,10 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePartecipanti"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Elenco dipendenti</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Elenco dipendenti</h4>
             <label for="searchForm">Search: </label>
-            <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+            <input type="text" class="form-control" ng-model="searchTutors.$">
             <button ng-click="savePersone('docenti')" data-dismiss="modal">Salva</button>
           </div>
           <div class="modal-body">
@@ -180,10 +183,10 @@
               </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="docente in docs | filter:search:strict | orderBy: orderProp : asc">
+                <tr ng-repeat="docente in localData_tutors | filter:searchTutors:strict | orderBy: orderProp : asc">
                   <td><input type="checkbox" value="{{docente.id}}" ng-checked="selectionDoc.indexOf(docente.id,'docente') > -1" ng-click="addPartecipanti(docente.id,'docente')"></td>
-                  <td>{{docente.value.cognome}}</td>
-                  <td>{{docente.value.nome}}</td>
+                  <td>{{docente.doc.cognome}}</td>
+                  <td>{{docente.doc.nome}}</td>
                 </tr>
               </tbody>
             </table>

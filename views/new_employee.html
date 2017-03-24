@@ -89,12 +89,28 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="col-sm-2 control-label">Tipologia</label>
+          <div class="col-sm-10">
+            <label class="checkbox-inline">
+              <input type="checkbox" value="true" ng-model="fields.staff">
+              Dipendente
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" value="tutor" ng-model="fields.tutor">
+              Docente corsi
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-sm-offset-2 col-sm-1">
             <button type="submit" class="btn btn-success">Salva</button>
           </div>
           <div class="col-sm-1">
-            <button type="reset" class="btn btn btn-danger">Reset</button>
+            <button type="reset" class="btn btn btn-danger" ng-click="resetForm()">Reset</button>
           </div>
+        </div>
+        <div>
+          <pre>{{fields | json}}</pre>
         </div>
       </form>
     </div>
