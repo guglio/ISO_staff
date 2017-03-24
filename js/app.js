@@ -7,8 +7,8 @@ var app = angular.module('app', ['ngRoute'])
       $routeProvider.
           when('/', //table view of all the employees
             {
-              templateUrl: 'views/index.html',
-              controller:'IndexCtrl'
+              templateUrl: 'views/home.html',
+              controller:'HomeCtrl'
             }).
           when('/new_employee', //view to create new employee
             {
@@ -47,7 +47,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to load initial data
-  .controller('IndexCtrl', function($scope, loadLocalData,$rootScope){
+  .controller('HomeCtrl', function($scope, loadLocalData,$rootScope){
 
     // Load data inside $rootScope.localData if it's not already loaded
     if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined){
