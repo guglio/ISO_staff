@@ -1,6 +1,15 @@
 //URL of the CouchDB server
 var urlDB = "http://localhost:5984/ciam";
-var modello_personale = {"modello_numero":"7.2.2.2","revisione":"00","data_revisione":"01/01/2017"};
+var modello_personale = {
+          "modello_numero" : "7.2.2.2",
+          "revisione" : "00",
+          "data_revisione" : "01/01/2017"
+        };
+var rapporto_addestramento = {
+          "modello_numero" : "7.2.2.2",
+          "revisione" : "00",
+          "data_revisione" : "01/01/2017"
+        };
 
 // initialize the app
 var app = angular.module('app', ['ngRoute'])
@@ -310,7 +319,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to fetch and display the courses data inside a table
-  .controller('CoursesCtrl', function($scope, $route,$rootScope, $location){
+  .controller('CoursesCtrl', function($scope, $route, $rootScope, $location){
     // If it's not already loaded, return to index view
     if($rootScope.localData_employees === undefined){
       $location.path('/');
@@ -322,6 +331,37 @@ var app = angular.module('app', ['ngRoute'])
     };
   })
 
+
+
+  // controller to show course details
+  .controller('CourseCtrl',function($scope, $http, $routeParams){
+    $scope.modello_num = rapporto_addestramento.modello_numero;
+    $scope.modello_revisione = rapporto_addestramento.revisione;
+    $scope.data_revisione_modello = rapporto_addestramento.data_revisione;
+
+    $http.get(urlDB+'/'+$routeParams.id) // get employee details
+         .then(function successCallback(response) {
+            $scope.course = response.data; // save details to "dipendendente"
+            if(!$scope.course.partecipanti); // check if there are course to display
+            else{
+              var partecipanti = []; // initialize an empty array to save the partecipants
+                angular.forEach($scope.course.partecipanti, function(value, key){
+                  partecipanti.push(value.id); // loop and save partecipants id inside the array "partecipanti"
+                });
+                $scope.course.num_partecipanti = partecipanti.length;
+                // request to server for the details of the partecipants
+                $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":partecipanti}).
+                  then(
+                    function successCallback(response) {
+                      $scope.partecipanti = response.data.rows; // save the courses details inside "corsi", to render the inside the view
+                    },
+                    function errorCallback(response) {
+                      console.log("Error "+response.status+" - "+response.statusText);
+                    }
+                );
+            }
+          });
+  })
 
 
   // // factory to save globally the data (employees and tutors), to reduce calls to the database

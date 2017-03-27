@@ -20,7 +20,7 @@
     </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="course in courses | filter:search:strict | orderBy: orderProp : asc">
+      <tr ng-repeat="course in localData_courses | filter:search:strict | orderBy: orderProp : asc">
         <td><a href="/#!/course/{{course.id}}">{{course.doc.num_addestramento}}</a></td>
         <td><a href="/#!/course/{{course.id}}">{{course.doc.data}}</a></td>
         <td><a href="/#!/course/{{course.id}}">{{course.doc.oggetto}}</a></td>

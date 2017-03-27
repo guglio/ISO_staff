@@ -1,0 +1,115 @@
+<div class="courses">
+  <div class="container-fluid">
+    <ul class="pager hidden-print">
+      <li class="previous"><a href="/#!/courses"><span aria-hidden="true">&larr;</span> Back</a></li>
+    </ul>
+    <div class="row">
+      <div class="col-md-3">
+        <img src="/images/logo_ciam.png" alt="Logo C.I.A.M. SRL" class="img-responsive hidden-print">
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <h1 class="text-center">Rapporto di addestramento</h1>
+      </div>
+      <div class="col-md-2 col-md-offset-2">
+        <small>MOD {{modello_num}}<br>Rev {{modello_revisione}} del {{data_revisione_modello | date:"dd/MM/yyyy" }}</small>
+      </div>
+    </div>
+    <div class="row" style="padding-top:4em;">
+      <div class="col-md-4 col-md-offset-1">
+        Rapporto n°: <strong>{{course.num_addestramento}}</strong>
+      </div>
+      <div class="col-md-4 col-md-offset-3">
+        Data: {{course.data | date:"dd/MM/yyyy" }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        Data inizio corso: {{course.data_inizio | date:"dd/MM/yyyy" }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        Data fine corso: {{course.data_fine | date:"dd/MM/yyyy" }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        Numero partecipanti: {{course.num_partecipanti}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        Materiale didattico: {{course.documentazione}}
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid" ng-show="course.partecipanti">
+    <h3 class="text-center">Nominativi dei partecipanti</h3>
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Cognome</th>
+          <th>Nome</th>
+          <th>Mansione</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="partecipante in course.partecipanti" ng-if="!course.partecipanti.error">
+          <td>{{partecipante.cognome}}</td>
+          <td>{{partecipante.nome}}</td>
+          <td>{{partecipante.mansione}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container-fluid" ng-show="course.docenti">
+    <h3 class="text-center">Docenti</h3>
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Cognome</th>
+          <th>Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="docente in course.docenti" ng-if="!course.docenti.error">
+          <td>{{docente.cognome}}</td>
+          <td>{{docente.nome}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container-fluid" ng-show="course.oggetto">
+    <h3 class="text-center">Attività ogetto del corso</h3>
+    <p>{{course.oggetto}}</p>
+  </div>
+  <div class="container-fluid" ng-show="course.argomenti">
+    <h3 class="text-center">Argomenti trattati</h3>
+    <p>{{course.argomenti}}</p>
+  </div>
+  <div class="container-fluid" ng-show="course.metodo_verifica">
+    <h3 class="text-center">Metodo di verifica</h3>
+    <p>{{course.metodo_verifica}}</p>
+  </div>
+  <div class="container-fluid" ng-show="course.partecipanti">
+    <h3 class="text-center">Risultati verifica</h3>
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Cognome</th>
+          <th>Nome</th>
+          <th>Risultato</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="partecipante in course.partecipanti" ng-if="!course.partecipanti.error">
+          <td>{{partecipante.cognome}}</td>
+          <td>{{partecipante.nome}}</td>
+          <td>{{partecipante.risultato}}</td>
+          <td>{{partecipante.data | date:"dd/MM/yyyy"}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
