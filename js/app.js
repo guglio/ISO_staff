@@ -71,17 +71,16 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to fetch and display the employees data inside a table
-  .controller('EmployeesCtrl', function($scope, $route,$rootScope,$location) {
+  .controller('EmployeesCtrl', function($scope, $route,$rootScope,$location,loadLocalData,$q) {
 
-    // If it's not already loaded, return to index view
+    // If it's not already loaded, load the data
     if($rootScope.localData_employees === undefined){
-      $location.path('/');
+      loadLocalData();
+      $q.all($rootScope);
     }
-    else{
-      // property used to change the order of employees (A->Z or Z->A)
-      $scope.orderProp = "value.cognome";
-      $scope.asc = false; // default A->Z
-    }
+    // property used to change the order of employees (A->Z or Z->A)
+    $scope.orderProp = "value.cognome";
+    $scope.asc = false; // default A->Z
 
     // function to relaod the current view, so the data it's updated
     $scope.reloadData = function(){
@@ -124,7 +123,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to submit new employee to the database.
-  .controller('NewEmployeeCtrl', function($scope, $http){
+  .controller('NewEmployeeCtrl', function($scope, $http,loadLocalData){
     $scope.submitMyForm = function(){
         // add the "nome_completo" var to the "fields" array
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
@@ -134,13 +133,12 @@ var app = angular.module('app', ['ngRoute'])
           then(
               function successCallback(response) {
                 console.log("Data upload without errors");
+                // update local data
+                loadLocalData();
               },
               function errorCallback(response) {
                 console.log("Error "+response.status+" - "+response.statusText);
               });
-        //
-        //todo: add to Personale or reload it, so it's updated globally!
-        //
     };
     // function to clean the data inside fields after resetting the view
     $scope.resetForm = function(){
@@ -151,72 +149,72 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller that handle the add of new course
-  .controller('NewCourseCtrl', function($scope, $http, $rootScope, $location){
-    // If it's not already loaded, return to index view
+  .controller('NewCourseCtrl', function($scope, $http, $rootScope, $location, loadLocalData,$q){
+    // If it's not already loaded, load the data
     if($rootScope.localData_employees === undefined){
-      $location.path('/');
+      loadLocalData();
+      $q.all($rootScope);
     }
-    else{
 
-      $scope.fields = {}; // initialize the fields object
-      $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear(); // create a custom placeholder for the course internal ID
-      $scope.selection = []; // array for selected employees
-      $scope.partecipanti = []; // array for partecipants
-      $scope.selectionDoc = []; // array for selected tutors
-      $scope.docenti = []; // array for tutors
-      $scope.fields.course = true; // set the type of this record to "corso"
-      // function to submit data to the database
-      $scope.submitMyForm = function(){
-          if($scope.partecipanti && $scope.docenti){
-            $scope.fields.partecipanti = $scope.partecipanti;
-            $scope.fields.docenti = $scope.docenti;
-          }
+    $scope.fields = {}; // initialize the fields object
+    $scope.rapporto_placeholder = "xx/"+ new Date().getFullYear(); // create a custom placeholder for the course internal ID
+    $scope.selection = []; // array for selected employees
+    $scope.partecipanti = []; // array for partecipants
+    $scope.selectionDoc = []; // array for selected tutors
+    $scope.docenti = []; // array for tutors
+    $scope.fields.course = true; // set the type of this record to "corso"
+    // function to submit data to the database
+    $scope.submitMyForm = function(){
+        if($scope.partecipanti && $scope.docenti){
+          $scope.fields.partecipanti = $scope.partecipanti;
+          $scope.fields.docenti = $scope.docenti;
+        }
 
 
-          // post data
-          $http.post(urlDB, $scope.fields)
-            .then(
-              function successCallback(response) {
-                var corso_id = response.data.id; // get the "_id" of the course
-                var ids = []; // initialize the participants's ids array
-                for (var i=0;i<$scope.num_partecipanti;i++){
-                  ids.push($scope.partecipanti[i].id); // populate the array
-                }
-                console.log(ids);
-                // request documents with the corresponding participants id
-                $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":ids}).then(
-                  function successCallback(response) {
-                    var dipendentiUpdate = []; // initialize empty array for the updated data
-                    var n = response.data.rows.length;
-                    for(var j=0;j<n;j++){
-                      dipendentiUpdate.push(response.data.rows[j].doc);
-                      if(!dipendentiUpdate[j].corsi)
-                        dipendentiUpdate[j].corsi = []; // if the document doesn't have yet a "corsi" array, create one
-                      dipendentiUpdate[j].corsi.push({id:corso_id}); // add the course id to the current document
-                    }
-                    // post the updated data to the database
-                    $http.post(urlDB+'/_bulk_docs',{"docs":dipendentiUpdate}).then(
-                      function successCallback(response) {
-                        console.log(response.status+" - "+response.statusText);
-                        $scope.resetForm(); // reset form data
-                      },
-                      function errorCallback(response) {
-                        console.log("Error "+response.status+" - "+response.statusText);
-                      }
-                    );
-                  },
-                  function errorCallback(response) {
-                    console.log("Error "+response.status+" - "+response.statusText);
-                  }
-                );
-              },
-              function errorCallback(response) {
-                console.log("Error "+response.status+" - "+response.statusText);
+        // post data
+        $http.post(urlDB, $scope.fields)
+          .then(
+            function successCallback(response) {
+              var corso_id = response.data.id; // get the "_id" of the course
+              var ids = []; // initialize the participants's ids array
+              for (var i=0;i<$scope.num_partecipanti;i++){
+                ids.push($scope.partecipanti[i].id); // populate the array
               }
-          );
+              console.log(ids);
+              // request documents with the corresponding participants id
+              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":ids}).then(
+                function successCallback(response) {
+                  var dipendentiUpdate = []; // initialize empty array for the updated data
+                  var n = response.data.rows.length;
+                  for(var j=0;j<n;j++){
+                    dipendentiUpdate.push(response.data.rows[j].doc);
+                    if(!dipendentiUpdate[j].corsi)
+                      dipendentiUpdate[j].corsi = []; // if the document doesn't have yet a "corsi" array, create one
+                    dipendentiUpdate[j].corsi.push({id:corso_id}); // add the course id to the current document
+                  }
+                  // post the updated data to the database
+                  $http.post(urlDB+'/_bulk_docs',{"docs":dipendentiUpdate}).then(
+                    function successCallback(response) {
+                      console.log(response.status+" - "+response.statusText);
+                      $scope.resetForm(); // reset form data
+                      loadLocalData();
+                    },
+                    function errorCallback(response) {
+                      console.log("Error "+response.status+" - "+response.statusText);
+                    }
+                  );
+                },
+                function errorCallback(response) {
+                  console.log("Error "+response.status+" - "+response.statusText);
+                }
+              );
+            },
+            function errorCallback(response) {
+              console.log("Error "+response.status+" - "+response.statusText);
+            }
+        );
 
-      };
-    }
+    };
     // function to reset the current format data (used by the reset button and after the data submission)
     $scope.resetForm = function(){
       $scope.selection = [];
@@ -319,10 +317,11 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to fetch and display the courses data inside a table
-  .controller('CoursesCtrl', function($scope, $route, $rootScope, $location){
-    // If it's not already loaded, return to index view
+  .controller('CoursesCtrl', function($scope, $route, $rootScope, $location,loadLocalData,$q){
+    // If it's not already loaded, load the data
     if($rootScope.localData_employees === undefined){
-      $location.path('/');
+      loadLocalData();
+      $q.all($rootScope);
     }
 
     // function to relaod the current view, so the data it's updated
@@ -340,68 +339,24 @@ var app = angular.module('app', ['ngRoute'])
     $scope.data_revisione_modello = rapporto_addestramento.data_revisione;
 
     $http.get(urlDB+'/'+$routeParams.id) // get employee details
-         .then(function successCallback(response) {
-            $scope.course = response.data; // save details to "dipendendente"
-            if(!$scope.course.partecipanti); // check if there are course to display
-            else{
-              var partecipanti = []; // initialize an empty array to save the partecipants
-                angular.forEach($scope.course.partecipanti, function(value, key){
-                  partecipanti.push(value.id); // loop and save partecipants id inside the array "partecipanti"
-                });
-                $scope.course.num_partecipanti = partecipanti.length;
-                // request to server for the details of the partecipants
-                $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":partecipanti}).
-                  then(
-                    function successCallback(response) {
-                      $scope.partecipanti = response.data.rows; // save the courses details inside "corsi", to render the inside the view
-                    },
-                    function errorCallback(response) {
-                      console.log("Error "+response.status+" - "+response.statusText);
-                    }
-                );
+         .then(
+            function successCallback(response) {
+              // save details to "dipendendente"
+              $scope.course = response.data;
+              // check if there are partecipants to display
+              if(!$scope.course.partecipanti)
+                $scope.course.num_partecipanti = 0;
+              else
+                $scope.course.num_partecipanti = $scope.course.partecipanti.length;
+            },
+            function errorCallback(response) {
+              console.log("Error "+response.status+" - "+response.statusText);
             }
-          });
+          );
   })
 
 
-  // // factory to save globally the data (employees and tutors), to reduce calls to the database
-  // .factory('Personale', function($http){
-  //   var personale = {};
-  //   var docenti = [];
-  //   var tutors = {};
-  //   var n;
-  //   return{
-  //     getPersonale: function(){
-  //       return personale;
-  //     },
-  //     getDocenti: function(){
-  //       return docenti;
-  //     },
-  //     addNewDocente : function(entry){
-  //       docenti.push(entry);
-  //     },
-  //     addTutor : function(entry){
-  //       tutors = entry;
-  //     },
-  //     dataLoaded : function(){
-  //       return n;
-  //     },
-  //     loadData: function(Personale){
-  //       $http.get(urlDB+'/_design/views/_view/staff?include_docs=true')
-  //            .then(
-  //              function successCallback(response) {
-  //                // save to factory variable, so I don't have to fetch everytime the employees data
-  //                 personale = response.data.rows;
-  //
-  //
-  //               },
-  //               function errorCallback(response) {
-  //                 console.log("Error "+response.status+" - "+response.statusText);
-  //               }
-  //           );
-  //     }
-  //   }
-  // })
+  // factory to load the data locally, inside $rootScope
   .factory('loadLocalData',function($http, $rootScope){
     return function loadLocalData(){
       $http.get(urlDB+'/_design/views/_view/staff?include_docs=true')
