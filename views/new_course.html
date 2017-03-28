@@ -1,9 +1,10 @@
 <div class="corso">
   <div class="container-fluid">
-    <ul class="pager">
-      <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Back</a></li>
-      <li><h1 class="text-center">Dati nuovo corso di formazione</h1></li>
-    </ul>
+    <ol class="breadcrumb hidden-print">
+      <li><a href="/#!/">Home</a></li>
+      <li class="active"><a href="/#!/new_course">Nuovo Corso</a></li>
+    </ol>
+    <h1 class="text-center">Dati nuovo corso di formazione</h1>
     <h3 class="text-center">Rapporto di addestramento</h3>
     <div class="row">
       <form class="form-horizontal" ng-submit="submitMyForm()">
@@ -124,6 +125,7 @@
         </div>
       </form>
       <div>
+        <pre>{{selection}}</pre>
         <pre>{{fields | json}}</pre>
       </div>
     </div>
