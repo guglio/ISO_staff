@@ -17,3 +17,10 @@ footer {
   padding: 4em 0;
   font-size: 0.8em;
 }
+
+@media print {
+  /* line 17, ../sass/screen.scss */
+  a[href]:after {
+    content: none;
+  }
+}
