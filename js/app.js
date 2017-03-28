@@ -50,6 +50,11 @@ var app = angular.module('app', ['ngRoute'])
               templateUrl: 'views/course.html',
               controller: 'CourseCtrl'
             }).
+          when('/course/:_id/:id',
+            {
+              templateUrl: 'views/employee.html',
+              controller: 'EmployeeCtrl'
+            }).
           otherwise({ //fallback view
             redirectTo: '/'
           });
@@ -57,15 +62,12 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to load initial data
-  .controller('HomeCtrl', function($scope, loadLocalData,$rootScope){
+  .controller('HomeCtrl', function($scope, loadLocalData, $rootScope, $q){
 
     // Load data inside $rootScope.localData if it's not already loaded
-    if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined){
-      console.log("...loading data...");
+    if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined || $rootScope.localData_tutors === undefined){
       loadLocalData();
-    }
-    else {
-      console.log("already loaded");
+      $q.all($rootScope);
     }
   })
 
@@ -74,7 +76,7 @@ var app = angular.module('app', ['ngRoute'])
   .controller('EmployeesCtrl', function($scope, $route,$rootScope,$location,loadLocalData,$q) {
 
     // If it's not already loaded, load the data
-    if($rootScope.localData_employees === undefined){
+    if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined || $rootScope.localData_tutors === undefined){
       loadLocalData();
       $q.all($rootScope);
     }
@@ -92,11 +94,20 @@ var app = angular.module('app', ['ngRoute'])
 
   // controller to handle the detail view of employees.
   // I collect the URL id to determine the ID of the employee
-  .controller("EmployeeCtrl", function($scope, $http, $routeParams){
+  .controller("EmployeeCtrl", function($scope, $http, $routeParams,CourseLink){
     $scope.modello_num = modello_personale.modello_numero;
     $scope.modello_revisione = modello_personale.revisione;
     $scope.data_revisione_modello = modello_personale.data_revisione;
+    $scope.fromCorso = false;
 
+    // if this controller it's called from the course's detail view, add the link on top (Home / Elenco Corsi / course_id / surname name)
+    if(Object.getOwnPropertyNames($routeParams).length>1){
+      $scope.fromCorso = true;
+      var courselink = CourseLink.getCourseUrl();
+      $scope.course = [];
+      $scope.course._id = courselink.url;
+      $scope.course.num_addestramento = courselink.name;
+    }
     $http.get(urlDB+'/'+$routeParams.id) // get employee details
          .then(function successCallback(response) {
             $scope.dipendente = response.data; // save details to "dipendendente"
@@ -111,6 +122,14 @@ var app = angular.module('app', ['ngRoute'])
                   then(
                     function successCallback(response) {
                       $scope.corsi = response.data.rows; // save the courses details inside "corsi", to render the inside the view
+
+                      $scope.corsi.forEach(function(corso){
+                        var partecipantiArr = corso.doc.partecipanti;
+                        partecipantiArr.forEach(function(partecipante){
+                          if(partecipante.id === $scope.dipendente._id)
+                            corso.doc.risultato=partecipante.risultato;
+                        });
+                      });
                     },
                     function errorCallback(response) {
                       console.log("Error "+response.status+" - "+response.statusText);
@@ -151,7 +170,7 @@ var app = angular.module('app', ['ngRoute'])
   // controller that handle the add of new course
   .controller('NewCourseCtrl', function($scope, $http, $rootScope, $location, loadLocalData,$q){
     // If it's not already loaded, load the data
-    if($rootScope.localData_employees === undefined){
+    if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined || $rootScope.localData_tutors === undefined){
       loadLocalData();
       $q.all($rootScope);
     }
@@ -176,13 +195,13 @@ var app = angular.module('app', ['ngRoute'])
           .then(
             function successCallback(response) {
               var corso_id = response.data.id; // get the "_id" of the course
-              var ids = []; // initialize the participants's ids array
-              for (var i=0;i<$scope.num_partecipanti;i++){
-                ids.push($scope.partecipanti[i].id); // populate the array
-              }
+              // var ids = []; // initialize the participants's ids array
+              // for (var i=0;i<$scope.num_partecipanti;i++){
+              //   ids.push($scope.partecipanti[i].id); // populate the array
+              // }
               console.log(ids);
               // request documents with the corresponding participants id
-              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":ids}).then(
+              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":$scope.papartecipants}).then(
                 function successCallback(response) {
                   var dipendentiUpdate = []; // initialize empty array for the updated data
                   var n = response.data.rows.length;
@@ -319,7 +338,7 @@ var app = angular.module('app', ['ngRoute'])
   // controller to fetch and display the courses data inside a table
   .controller('CoursesCtrl', function($scope, $route, $rootScope, $location,loadLocalData,$q){
     // If it's not already loaded, load the data
-    if($rootScope.localData_employees === undefined){
+    if($rootScope.localData_employees === undefined || $rootScope.localData_courses === undefined || $rootScope.localData_tutors === undefined){
       loadLocalData();
       $q.all($rootScope);
     }
@@ -333,7 +352,7 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to show course details
-  .controller('CourseCtrl',function($scope, $http, $routeParams){
+  .controller('CourseCtrl',function($scope, $http, $routeParams,CourseLink){
     $scope.modello_num = rapporto_addestramento.modello_numero;
     $scope.modello_revisione = rapporto_addestramento.revisione;
     $scope.data_revisione_modello = rapporto_addestramento.data_revisione;
@@ -343,6 +362,7 @@ var app = angular.module('app', ['ngRoute'])
             function successCallback(response) {
               // save details to "dipendendente"
               $scope.course = response.data;
+              CourseLink.setCourseUrl($scope.course._id,$scope.course.num_addestramento);
               // check if there are partecipants to display
               if(!$scope.course.partecipanti)
                 $scope.course.num_partecipanti = 0;
@@ -392,5 +412,20 @@ var app = angular.module('app', ['ngRoute'])
                 console.log("Tutors: "+response.status+" - "+response.statusText);
               }
           );
+    }
+  })
+
+  .factory('CourseLink',function(){
+    var courseUrl = [];
+    return{
+      setCourseUrl : function(url,value){
+        courseUrl.url = url;
+        courseUrl.name = value;
+      },
+      getCourseUrl : function(){
+        tmp = courseUrl;
+        courseUrl = [];
+        return tmp;
+      }
     }
   });
