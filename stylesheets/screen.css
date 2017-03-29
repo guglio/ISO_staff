@@ -24,3 +24,7 @@ footer {
     content: none;
   }
 }
+/* line 21, ../sass/screen.scss */
+.home img {
+  max-height: 200px;
+}
