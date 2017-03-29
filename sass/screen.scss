@@ -6,3 +6,18 @@
 .container-fluid{
   max-width: 1200px;
 }
+.row.buffer-top div{
+  margin-top: 2em;
+}
+footer{
+  padding: 4em 0;
+  font-size: 0.8em;
+}
+@media print {
+  a[href]:after {
+    content: none;
+  }
+}
+.home img{
+  max-height: 200px;
+}

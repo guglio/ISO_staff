@@ -1,0 +1,201 @@
+<div class="corso">
+  <div class="container-fluid">
+    <ol class="breadcrumb hidden-print">
+      <li><a href="/#!/">Home</a></li>
+      <li class="active"><a href="/#!/new_course">Nuovo Corso</a></li>
+    </ol>
+    <h1 class="text-center">Dati nuovo corso di formazione</h1>
+    <h3 class="text-center">Rapporto di addestramento</h3>
+    <div class="row">
+      <form class="form-horizontal" ng-submit="submitMyForm()">
+        <div class="form-group">
+          <label for="nome" class="col-sm-2 control-label">Rapporto n°:</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="nome" placeholder="{{rapporto_placeholder}}" ng-model="fields.num_addestramento">
+          </div>
+          <label for="nome" class="col-sm-2 control-label">Data</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" id="nome" placeholder="Nome" ng-model="fields.data">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Data inizio corso</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" placeholder="Cognome" ng-model="fields.data_inizio">
+          </div>
+          <label for="cognome" class="col-sm-2 control-label">Data fine corso</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control" placeholder="Cognome" ng-model="fields.data_fine">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Numero partecipanti</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" placeholder="0" ng-model="num_partecipanti" value="{{num_partecipanti}}" readonly="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Materiale didattico</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="Materiale didattico" ng-model="fields.documentazione">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <a class="btn btn-default" role="button" data-toggle="modal" data-target="#modalPartecipanti">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi partecipanti
+            </a>
+            <a class="btn btn-default" role="button" data-toggle="modal" data-target="#modalDocenti">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi docenti
+            </a>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Attività oggetto del corso di formazione</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="5" ng-model="fields.oggetto"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Argomenti trattati</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="5" ng-model="fields.argomenti"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cognome" class="col-sm-2 control-label">Metodo di verifica</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="5" ng-model="fields.metodo_verifica"></textarea>
+          </div>
+        </div>
+        <div class="container-fluid" ng-show="num_docenti>0">
+          <h3 class="text-center">Nominativi dei Docenti</h3>
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Cognome</th>
+              <th>Nome</th>
+              <th>Mansione</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="docente in fields.docenti">
+                <td>{{docente.cognome}}</td>
+                <td>{{docente.nome}}</td>
+                <td>{{docente.mansione}}</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid" ng-show="num_partecipanti>0">
+          <h3 class="text-center">Partecipanti Corso</h3>
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Cognome</th>
+              <th>Nome</th>
+              <th>Risultato</th>
+              <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="partecipante in fields.partecipanti">
+                <td>{{partecipante.cognome}}</td>
+                <td>{{partecipante.nome}}</td>
+                <td>
+                  <select ng-model="partecipante.risultato" class="form-control">
+                    <option>Positivo</option>
+                    <option>Negativo</option>
+                  </select>
+                </td>
+                <td>{{partecipante.data | date:'dd/MM/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-1">
+            <button type="submit" class="btn btn-success">Salva</button>
+          </div>
+          <div class="col-sm-1">
+            <button type="reset" class="btn btn btn-danger" ng-click="resetForm()">Reset</button>
+          </div>
+        </div>
+      </form>
+      <div>
+        <pre>{{selection}}</pre>
+        <pre>{{fields | json}}</pre>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Partecipanti-->
+  <div class="modal fade" id="modalPartecipanti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Elenco dipendenti</h4>
+          <label for="searchForm">Search: </label>
+          <input type="text" class="form-control" ng-model="searchStaff.$">
+          <button ng-click="savePersone('partecipanti')" data-dismiss="modal">Salva</button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th></th>
+              <th>Cognome</th>
+              <th>Nome</th>
+              <th>Cantiere</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="dipendente in localData_employees | filter:searchStaff:strict | orderBy: orderProp : asc">
+                <td><input type="checkbox" value="{{dipendente.id}}" ng-checked="selection.indexOf(dipendente.id,'partecipante') > -1" ng-click="addPartecipanti(dipendente.id,'partecipante')"></td>
+                <td>{{dipendente.doc.cognome}}</td>
+                <td>{{dipendente.doc.nome}}</td>
+                <td>{{dipendente.doc.cantiere}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Docenti-->
+    <div class="modal fade" id="modalDocenti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Elenco dipendenti</h4>
+            <label for="searchForm">Search: </label>
+            <input type="text" class="form-control" ng-model="searchTutors.$">
+            <button ng-click="savePersone('docenti')" data-dismiss="modal">Salva</button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th></th>
+                <th>Cognome</th>
+                <th>Nome</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="docente in localData_tutors | filter:searchTutors:strict | orderBy: orderProp : asc">
+                  <td><input type="checkbox" value="{{docente.id}}" ng-checked="selectionDoc.indexOf(docente.id,'docente') > -1" ng-click="addPartecipanti(docente.id,'docente')"></td>
+                  <td>{{docente.doc.cognome}}</td>
+                  <td>{{docente.doc.nome}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+</div>

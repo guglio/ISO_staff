@@ -6,3 +6,25 @@
 .container-fluid {
   max-width: 1200px;
 }
+
+/* line 9, ../sass/screen.scss */
+.row.buffer-top div {
+  margin-top: 2em;
+}
+
+/* line 12, ../sass/screen.scss */
+footer {
+  padding: 4em 0;
+  font-size: 0.8em;
+}
+
+@media print {
+  /* line 17, ../sass/screen.scss */
+  a[href]:after {
+    content: none;
+  }
+}
+/* line 21, ../sass/screen.scss */
+.home img {
+  max-height: 200px;
+}

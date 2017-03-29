@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <ol class="breadcrumb hidden-print">
+    <li><a href="/#!/">Home</a></li>
+    <li class="active"><a href="/#!/employees">Elenco Personale</a></li>
+  </ol>
+  <h1 class="text-center">Elenco del personale</h1>
+  <div class="form-inline hidden-print">
+      <label for="searchForm">Search: </label>
+      <input type="text" class="form-control" ng-model="search.$" id="searchForm">
+      <!--<a class="btn btn-default" role="button" ng-click="reloadData()">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+      </a> -->
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover table-striped">
+      <thead>
+      <tr>
+        <th>Cognome <span class="glyphicon glyphicon-sort-by-alphabet hidden-print" ng-click="asc = false"></span><span class="glyphicon glyphicon-sort-by-alphabet-alt hidden-print" ng-click="asc = true"></span></th>
+        <th>Nome</th>
+        <th>Cantiere</th>
+        <th>Qualifica</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="dipendente in localData_employees | filter:search:strict | orderBy: orderProp : asc">
+          <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.cognome}}</a></td>
+          <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.nome}}</a></td>
+          <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.cantiere}}</a></td>
+          <td><a href="/#!/employee/{{dipendente.id}}">{{dipendente.doc.qualifica}}</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
