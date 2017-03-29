@@ -1,5 +1,5 @@
 //URL of the CouchDB server
-var urlDB = "http://localhost:5984/ciam";
+var urlDB = "http://192.168.1.103:5984/ciam";
 var modello_personale = {
           "modello_numero" : "7.2.2.2",
           "revisione" : "00",
