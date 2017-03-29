@@ -8,7 +8,7 @@ In general, this project is intended as a tool to manage employees data and form
 
 These instructions will get you a copy of the project up and running on your local machine / local server.
 
-*NOTE: This project it's still under development. I created a dedicated branch for CouchDB (named couchDB, so much creativity) so use that, for now.*
+*NOTE: This project it's still under development. ~~I created a dedicated branch for CouchDB (named couchDB, so much creativity) so use that, for now.~~ Now that the project it's almost ready (it needs some minor adjustments), refer to master branch for latest updates*
 
 ### Prerequisites
 
