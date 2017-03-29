@@ -8,46 +8,60 @@
     <h3 class="text-center">Dati anagrafici</h3>
     <div class="row">
       <form class="form-horizontal" ng-submit="submitMyForm()">
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="nome" class="col-sm-2 control-label">Nome</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" placeholder="Nome" ng-model="fields.nome">
+            <input type="text" class="form-control" id="nome" placeholder="Nome" ng-model="fields.nome" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.nome"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.nome"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="cognome" class="col-sm-2 control-label">Cognome</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cognome" placeholder="Cognome" ng-model="fields.cognome">
+            <input type="text" class="form-control" id="cognome" placeholder="Cognome" ng-model="fields.cognome" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.cognome"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.cognome"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="nascita" class="col-sm-2 control-label">Data di nascita</label>
           <div class="col-sm-10">
-            <input type="date" class="form-control" id="nascita" placeholder="Data di nascita (gg/mm/aaaa)"  ng-model="fields.data_nascita">
+            <input type="date" class="form-control" id="nascita" placeholder="Data di nascita (gg/mm/aaaa)"  ng-model="fields.data_nascita" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.data_nascita"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.data_nascita"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="comune_nascita" class="col-sm-2 control-label">Comune di nascita</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="comune_nascita" placeholder="Comune di nascita" ng-model="fields.comune_nascita">
+            <input type="text" class="form-control" id="comune_nascita" placeholder="Comune di nascita" ng-model="fields.comune_nascita" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.comune_nascita"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.comune_nascita"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="cf" class="col-sm-2 control-label">Codice Fiscale</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cf" placeholder="Codice Fiscale" ng-model="fields.cod_fiscale">
+            <input type="text" class="form-control" id="cf" placeholder="Codice Fiscale" ng-model="fields.cod_fiscale" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.cod_fiscale"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.cod_fiscale"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="cantiere" class="col-sm-2 control-label">Cantiere</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="cantiere" placeholder="Cantiere" ng-model="fields.cantiere">
+            <input type="text" class="form-control" id="cantiere" placeholder="Cantiere" ng-model="fields.cantiere" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.cantiere"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.cantiere"></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="qualifica" class="col-sm-2 control-label">Qualifica</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="qualifica" placeholder="Qualifica" ng-model="fields.qualifica">
+            <input type="text" class="form-control" id="qualifica" placeholder="Qualifica" ng-model="fields.qualifica" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.qualifica"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.qualifica"></span>
           </div>
         </div>
         <div class="form-group">
@@ -56,10 +70,12 @@
             <input type="text" class="form-control" id="cod_dipendente" placeholder="Codice Dipendente" ng-model="fields.cod_dipendente">
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="assunzione" class="col-sm-2 control-label">Data assunzione</label>
           <div class="col-sm-10">
             <input type="date" class="form-control" id="assunzione" placeholder="Data Assunzione (gg/mm/aaaa)" ng-model="fields.data_assunzione">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.data_assunzione"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.data_assunzione"></span>
           </div>
         </div>
         <div class="form-group">
@@ -68,10 +84,12 @@
             <input type="text" class="form-control" id="ccod_contrattof" placeholder="Codice Contratto" ng-model="fields.cod_contratto">
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group has-feedback">
           <label for="temp_contratto" class="col-sm-2 control-label">Contratto a tempo</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="temp_contratto" placeholder="Tempo indeterminato / etc" ng-model="fields.contratto_tempo">
+            <input type="text" class="form-control" id="temp_contratto" placeholder="Tempo indeterminato / etc" ng-model="fields.contratto_tempo" required="true">
+            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true" ng-show="fields.contratto_tempo"></span>
+            <span class="glyphicon glyphicon-asterisk form-control-feedback text-danger" aria-hidden="true" ng-show="!fields.contratto_tempo"></span>
           </div>
         </div>
         <div class="form-group">
