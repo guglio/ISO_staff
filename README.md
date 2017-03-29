@@ -87,7 +87,6 @@ I structured the data for the employees with these scheme:
   "provincia": "Province of residence",
   "staff": "true | false",
   "tutor": "true | false",
-  "type": "employee",
   "corsi":[
     {
       "id":"Course's _id"
@@ -125,7 +124,7 @@ The structure for the courses are the following:
       "id": "Tutor's _id"
     }
   ],
-  "type": "corso"
+  "course": true
 }
 
 ```
