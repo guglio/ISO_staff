@@ -3,7 +3,15 @@
     <li><a href="/#!/">Home</a></li>
     <li class="active"><a href="/#!/courses">Elenco Corsi</a></li>
   </ol>
-  <h1 class="text-center">Tabella riassuntiva dei corsi effettuati</h1>
+  <!--<div class="row">
+    <div class="col-md-4 col-md-offset-4"> -->
+      <h1 class="text-center">Piano annuale di addestramento<br><small>MOD {{modello_num}} Rev {{modello_revisione}} del {{data_revisione_modello | date:"dd/MM/yyyy" }}</small></h1>
+    <!--</div>
+    <div class="col-md-2 col-md-offset-2">
+      <small>MOD {{modello_num}}<br>Rev {{modello_revisione}} del {{data_revisione_modello | date:"dd/MM/yyyy" }}</small>
+    </div>
+  </div> -->
+
   <div class="form-inline hidden-print">
       <label for="searchForm">Search: </label>
       <input type="text" class="form-control" ng-model="search.$" id="searchForm">

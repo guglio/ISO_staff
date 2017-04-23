@@ -1,16 +1,26 @@
-//URL of the CouchDB server
-var urlDB = "http://192.168.1.103:5984/ciam";
-var modello_personale = {
-          "modello_numero" : "7.2.2.2",
-          "revisione" : "00",
-          "data_revisione" : "01/01/2017"
-        };
-var rapporto_addestramento = {
-          "modello_numero" : "7.2.2.2",
-          "revisione" : "00",
-          "data_revisione" : "01/01/2017"
-        };
+// TODO: aggiungere n° patente + scadenza + tipologia di patente (A,b,etc)
+//      carta identità + scadenza
+//      aggiungere files al singolo
 
+
+//URL of the CouchDB server
+// var urlDB = "http://192.168.1.23:5984/ciam";
+var urlDB = "http://localhost:5984/ciam";
+var modello_personale = {
+  "modello_numero" : "7.2.2.2",
+  "revisione" : "00",
+  "data_revisione" : "01/01/2017"
+};
+var rapporto_addestramento = {
+  "modello_numero" : "7.2.2.2",
+  "revisione" : "00",
+  "data_revisione" : "01/01/2017"
+};
+var pianoAddestramentoAnnuale = {
+  "modello_numero": "7.1.2.1",
+  "revisione": "00",
+  "data_revisione":"31/01/2017"
+};
 // initialize the app
 var app = angular.module('app', ['ngRoute'])
   .config(function ($routeProvider,$locationProvider) {
@@ -143,22 +153,41 @@ var app = angular.module('app', ['ngRoute'])
 
   // controller to submit new employee to the database.
   .controller('NewEmployeeCtrl', function($scope, $http,loadLocalData){
+    $scope.fields = {
+      nome: "ASDA",
+      cognome: "LKNLN",
+      data_nascita: new Date(2013, 9, 22),
+      comune_nascita: "MMM",
+      cod_fiscale: "NILNLN",
+      cantiere: "LONIN",
+      qualifica: "NIN",
+      cod_dipendente: "IONN",
+      data_assunzione: new Date(2013, 9, 22),
+      contratto_tempo: "ASOIDJDNA",
+      nome_completo: "LKNLN ASDA"
+    };
+
+
     $scope.submitMyForm = function(){
         // add the "nome_completo" var to the "fields" array
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
 
         // post the data to the server
-        $http.post(urlDB, $scope.fields).
-          then(
-              function successCallback(response) {
-                console.log("Data upload without errors");
-                // update local data
-                loadLocalData();
-              },
-              function errorCallback(response) {
-                console.log("Error "+response.status+" - "+response.statusText);
-              });
+        // $http.post(urlDB, $scope.fields).
+        //   then(
+        //       function successCallback(response) {
+        //         console.log("Data upload without errors");
+        //         // update local data
+        //         loadLocalData();
+        //       },
+        //       function errorCallback(response) {
+        //         console.log("Error "+response.status+" - "+response.statusText);
+        //       });
     };
+
+
+
+
     // function to clean the data inside fields after resetting the view
     $scope.resetForm = function(){
       delete $scope.fields;
@@ -195,11 +224,6 @@ var app = angular.module('app', ['ngRoute'])
           .then(
             function successCallback(response) {
               var corso_id = response.data.id; // get the "_id" of the course
-              // var ids = []; // initialize the participants's ids array
-              // for (var i=0;i<$scope.num_partecipanti;i++){
-              //   ids.push($scope.partecipanti[i].id); // populate the array
-              // }
-              console.log(ids);
               // request documents with the corresponding participants id
               $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":$scope.papartecipants}).then(
                 function successCallback(response) {
@@ -242,6 +266,9 @@ var app = angular.module('app', ['ngRoute'])
       $scope.docenti = [];
       $scope.num_partecipanti = 0;
       $scope.num_docenti = 0;
+      delete $scope.fields;
+      $scope.searchStaff = undefined;
+      $scope.searchTutors = undefined;
     };
 
     // function to add/remove partecipants (staff or employees) to the relative array (employees -> selection, tutors -> selectionDoc)
@@ -269,6 +296,7 @@ var app = angular.module('app', ['ngRoute'])
       }
     };
 
+
     // function to save the selected partecipants (staff or tutors) to the corresponding array for display purpose
     $scope.savePersone = function savePersone(type){
       // to reuse the same function, I divided the type of input data
@@ -279,22 +307,22 @@ var app = angular.module('app', ['ngRoute'])
         if($scope.partecipanti) // create the array if it doesn't exists
           $scope.partecipanti = [];
 
-        // loop inside the gloabl employees data, to find the saved ones
-        for(var i = 0; i < dipendenti_n; i++){
-          currentDip = $rootScope.localData_employees[i];
+        for(var i = 0; i < saved_n; i++ ){
+          currentID = $scope.selection[i];
+          for(var j = 0; j < dipendenti_n; j++){
+            currentDip = $rootScope.localData_employees[j];
 
-          for(var j = 0; j < saved_n; j++){
-            currentID = $scope.selection[j];
-            // if found, add to the "partecipanti" array
             if(currentDip.id == currentID){
 
               $scope.partecipanti.push({nome:currentDip.doc.nome,cognome:currentDip.doc.cognome,mansione:currentDip.doc.qualifica,risultato:"Positivo",data:$scope.fields.data,id:currentDip.id});
             }
           }
         }
+
         $scope.fields.partecipanti = $scope.partecipanti;
         // update the total numbers of staff (for display purpose and input placeholder)
         $scope.num_partecipanti = $scope.partecipanti.length;
+        $scope.searchStaff = undefined;
       }
       if(type == "docenti"){
         var docenti_n = $rootScope.localData_tutors.length; // length of all the tutors (docs -> global var)
@@ -321,8 +349,8 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.docenti = $scope.docenti;
         // update the total numbers of tutos (for display purpose)
         $scope.num_docenti = $scope.docenti.length;
+        $scope.searchTutors = undefined;
       }
-      $scope.search = null;
     };
 
     // watch for changes to the date of the course, to update the view and the data of the corresponding employees course date
@@ -342,7 +370,9 @@ var app = angular.module('app', ['ngRoute'])
       loadLocalData();
       $q.all($rootScope);
     }
-
+    $scope.modello_num = pianoAddestramentoAnnuale.modello_numero;
+    $scope.modello_revisione = pianoAddestramentoAnnuale.revisione;
+    $scope.data_revisione_modello = pianoAddestramentoAnnuale.data_revisione;
     // function to relaod the current view, so the data it's updated
     $scope.reloadData = function(){
       $route.reload();

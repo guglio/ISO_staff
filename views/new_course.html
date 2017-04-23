@@ -127,7 +127,10 @@
         </div>
       </form>
       <div>
-        <pre>{{selection}}</pre>
+        partecipanti
+        <pre>{{partecipanti | json}}</pre>
+        selection
+        <pre>{{selection | json}}</pre>
         <pre>{{fields | json}}</pre>
       </div>
     </div>
@@ -139,11 +142,15 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Elenco dipendenti</h4>
-          <label for="searchForm">Search: </label>
-          <input type="text" class="form-control" ng-model="searchStaff.$">
-          <button ng-click="savePersone('partecipanti')" data-dismiss="modal">Salva</button>
         </div>
         <div class="modal-body">
+          <div class="form-inline">
+            <div class="form-group">
+              <label>Search: </label>
+              <input type="text" class="form-control" ng-model="searchStaff.$">
+            </div>
+            <button ng-click="savePersone('partecipanti')" data-dismiss="modal" class="btn btn-default">Salva</button>
+          </div>
           <table class="table table-hover">
             <thead>
             <tr>
