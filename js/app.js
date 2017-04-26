@@ -22,7 +22,7 @@ var pianoAddestramentoAnnuale = {
   "data_revisione":"31/01/2017"
 };
 // initialize the app
-var app = angular.module('app', ['ngRoute'])
+var app = angular.module('app', ['ngRoute','ngFileUpload'])
   .config(function ($routeProvider,$locationProvider) {
       $routeProvider.
           when('/', //table view of all the employees
@@ -152,7 +152,8 @@ var app = angular.module('app', ['ngRoute'])
 
 
   // controller to submit new employee to the database.
-  .controller('NewEmployeeCtrl', function($scope, $http,loadLocalData){
+  .controller('NewEmployeeCtrl', function($scope, $http,loadLocalData,Upload){
+    // dummy data, to test the functionality of the controller
     $scope.fields = {
       nome: "ASDA",
       cognome: "LKNLN",
@@ -163,34 +164,66 @@ var app = angular.module('app', ['ngRoute'])
       qualifica: "NIN",
       cod_dipendente: "IONN",
       data_assunzione: new Date(2013, 9, 22),
-      contratto_tempo: "ASOIDJDNA",
-      nome_completo: "LKNLN ASDA"
+      contratto_tempo: "ASOIDJDNA"
     };
 
+    // local function to load (multiple) file(s) (one at a time) into the server
+    // I structured the function to be recursive, so I can get the new revision ID after every $http.get
+    function putAttachment(files, documentId, documentRevision, index){
+      return $http.put(urlDB + '/' + documentId + '/' + files[index].name + "?rev=" + documentRevision, files[index],
+        {
+          headers: {
+            "Content-Type": files[index].type
+          }
+        })
+        .then(
+          function successCallback(response) {
+            console.log("Data upload without errors");
+            index--;
+            if(index >= 0)
+              return putAttachment(files, response.data.id, response.data.rev, index);
+            else{
+              // update local data
+              loadLocalData();
+              return 0;
+            }
+          },
+          function errorCallback(response) {
+            // console.log(response);
+            console.log("Error "+response.status+" - "+response.statusText);
+          });
+    }
 
     $scope.submitMyForm = function(){
         // add the "nome_completo" var to the "fields" array
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
 
         // post the data to the server
-        // $http.post(urlDB, $scope.fields).
-        //   then(
-        //       function successCallback(response) {
-        //         console.log("Data upload without errors");
-        //         // update local data
-        //         loadLocalData();
-        //       },
-        //       function errorCallback(response) {
-        //         console.log("Error "+response.status+" - "+response.statusText);
-        //       });
+        $http.post(urlDB, $scope.fields)
+          .then(
+            function successCallback(response) {
+              console.log("Data upload without errors");
+              console.log(response.data.id);
+              if($scope.files)
+                putAttachment($scope.files, response.data.id, response.data.rev, $scope.files.length - 1);
+              else {
+                // update local data
+                loadLocalData();
+              }
+            },
+            function errorCallback(response) {
+              console.log("Error "+response.status+" - "+response.statusText);
+            });
     };
 
-
-
+    $scope.addFiles = function(files){
+      $scope.files = files;
+    };
 
     // function to clean the data inside fields after resetting the view
     $scope.resetForm = function(){
       delete $scope.fields;
+      delete $scope.files;
     }
   })
 
