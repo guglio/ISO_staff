@@ -4,7 +4,6 @@
   "main": "index.html",
   "dependencies": {
     "angular": "^1.6.2",
-    "angular-file-upload": "^2.5.0",
     "angular-route": "^1.6.2",
     "bootstrap": "^3.3.7",
     "jquery": "^3.1.1",
