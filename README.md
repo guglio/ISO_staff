@@ -148,6 +148,7 @@ I added lots of commentes (almost every line of code) inside `js/app.js`, to hel
 * [Compass](http://compass-style.org/) - CSS framework
 * [Sass](http://sass-lang.com/) - awesome stylesheets
 * [Atom](https://atom.io/) - text editor
+* [ng-file-upload](https://github.com/danialfarid/ng-file-upload) - Angular directive to upload files
 
 ## Versioning
 
