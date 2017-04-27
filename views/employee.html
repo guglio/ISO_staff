@@ -57,4 +57,12 @@
       </tbody>
     </table>
   </div>
+  <div class="container-fluid" ng-show="dipendente._attachments">
+    <h3>Files</h3>
+    <ul class="list-unstyled">
+      <li ng-repeat="(fileName, file) in dipendente._attachments">
+        <a href="{{fileLink}}/{{fileName}}" target="_blank"><button class="btn btn-xs" ng-class="file.content_type == 'application/pdf' ? 'btn-danger' : 'btn-primary'">
+          {{fileName | getExtension | uppercase}}</button></a> <a href="{{fileLink}}/{{fileName}}" target="_blank">{{fileName | removeExtension}}</a></li>
+    </ul>
+  </div>
 </div>

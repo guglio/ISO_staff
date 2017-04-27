@@ -121,6 +121,7 @@ var app = angular.module('app', ['ngRoute','ngFileUpload'])
     $http.get(urlDB+'/'+$routeParams.id) // get employee details
          .then(function successCallback(response) {
             $scope.dipendente = response.data; // save details to "dipendendente"
+            $scope.fileLink = urlDB + "/" + $routeParams.id;
             if(!$scope.dipendente.corsi); // check if there are course to display
             else{
               var corsi = []; // initialize an empty array to save the courses
@@ -491,4 +492,20 @@ var app = angular.module('app', ['ngRoute','ngFileUpload'])
         return tmp;
       }
     }
+  })
+  .filter('removeExtension', function () {
+      return function(value) {
+          if(!angular.isString(value)) {
+              return value;
+          }
+          return value.replace(/\.[^/.]+$/, "");
+      };
+  })
+  .filter('getExtension', function () {
+      return function(value) {
+          if(!angular.isString(value)) {
+              return value;
+          }
+          return value.split('.').pop();
+      };
   });
