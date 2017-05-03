@@ -121,7 +121,47 @@
           </div>
         </div>
         <div class="form-group">
-          <div ngf-drop="addFiles($files)" ngf-select="addFiles($files)" multiple class="drop-box col-sm-offset-2 col-sm-10 bg-primary" name="files">Files here</div>
+          <label for="cartaIdentita" class="col-sm-2 control-label">Numero carta di identià</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="cartaIdentita" placeholder="Numero carta di identità" ng-model="fields.cartaIdentita">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="patenteN" class="col-sm-2 control-label">Numero patente</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="patenteN" placeholder="Numero patente" ng-model="fields.patente">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row col-md-offset-2">
+            <div class="col-sm-2">
+              <span><strong>Patente</strong></span>
+            </div>
+            <div class="col-sm-3">
+              <span><strong>Data di emissione</strong></span>
+            </div>
+            <div class="col-sm-3">
+              <span><strong>Data di scadenza</strong></span>
+            </div>
+          </div>
+          <div ng-repeat="cod_patente in patenti" class="row col-md-offset-2">
+            <div class="col-sm-2">
+              <label class="checkbox-inline">
+                <input type="checkbox" ng-true-value="{}" ng-model="fields.patente[cod_patente]">
+                {{cod_patente}}
+              </label>
+            </div>
+            <div class="col-sm-3">
+              <input type="date" class="form-control" placeholder="Data emissione (gg/mm/aaaa)" ng-model="fields.patente[cod_patente].emissione" ng-disabled="!fields.patente[cod_patente]">
+            </div>
+            <div class="col-sm-3">
+              <input type="date" class="form-control" placeholder="Data scadenza (gg/mm/aaaa)" ng-model="fields.patente[cod_patente].scadenza" ng-disabled="!fields.patente[cod_patente]">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Files</label>
+          <div ngf-drop="addFiles($files)" ngf-select="addFiles($files)" multiple class="col-sm-4 bg-primary jumbotron" name="files"><p class="text-center">Trascina qui i files o clicca per selezionarli</p></div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-1">
@@ -132,10 +172,11 @@
           </div>
         </div>
         <div>
-          <ul>
-            <li ng-repeat="f in files">{{f.name}} {{f.type}} - {{f.size}}</li>
+          <ul class="list-unstyled">
+            <li ng-repeat="f in files">
+              <span class="btn btn-xs" ng-class="f.type == 'application/pdf' ? 'btn-danger' : 'btn-primary'">
+                {{f.name | getExtension | uppercase}}</span></a> {{f.name | removeExtension}}</li>
           </ul>
-          <pre>{{fields.files}}</pre>
           <pre>{{fields | json}}</pre>
         </div>
       </form>
