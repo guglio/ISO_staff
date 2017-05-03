@@ -1,6 +1,4 @@
-// TODO: aggiungere n° patente + scadenza + tipologia di patente (A,b,etc)
-//      carta identità + scadenza
-//      aggiungere files al singolo
+// TODO: aggiungere la possibilità di modificare i dati degli impiegati
 
 
 //URL of the CouchDB server
@@ -21,6 +19,8 @@ var pianoAddestramentoAnnuale = {
   "revisione": "00",
   "data_revisione":"31/01/2017"
 };
+// different driving licenses category
+var patenti = ["AM","A1","A2","A","B1","B","C1","C","D1","D","BE","C1E","CE","D1E","DE"];
 // initialize the app
 var app = angular.module('app', ['ngRoute','ngFileUpload'])
   .config(function ($routeProvider,$locationProvider) {
@@ -167,7 +167,8 @@ var app = angular.module('app', ['ngRoute','ngFileUpload'])
       data_assunzione: new Date(2013, 9, 22),
       contratto_tempo: "ASOIDJDNA"
     };
-
+    // save the array of the driving license category to a scope variable
+    $scope.patenti = patenti;
     // local function to load (multiple) file(s) (one at a time) into the server
     // I structured the function to be recursive, so I can get the new revision ID after every $http.get
     function putAttachment(files, documentId, documentRevision, index){
