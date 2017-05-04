@@ -153,19 +153,19 @@ var app = angular.module('app', ['ngRoute'])
 
   // controller to submit new employee to the database.
   .controller('NewEmployeeCtrl', function($scope, $http,loadLocalData){
-    $scope.fields = {
-      nome: "ASDA",
-      cognome: "LKNLN",
-      data_nascita: new Date(2013, 9, 22),
-      comune_nascita: "MMM",
-      cod_fiscale: "NILNLN",
-      cantiere: "LONIN",
-      qualifica: "NIN",
-      cod_dipendente: "IONN",
-      data_assunzione: new Date(2013, 9, 22),
-      contratto_tempo: "ASOIDJDNA",
-      nome_completo: "LKNLN ASDA"
-    };
+    // $scope.fields = {
+    //   nome: "ASDA",
+    //   cognome: "LKNLN",
+    //   data_nascita: new Date(2013, 9, 22),
+    //   comune_nascita: "MMM",
+    //   cod_fiscale: "NILNLN",
+    //   cantiere: "LONIN",
+    //   qualifica: "NIN",
+    //   cod_dipendente: "IONN",
+    //   data_assunzione: new Date(2013, 9, 22),
+    //   contratto_tempo: "ASOIDJDNA",
+    //   nome_completo: "LKNLN ASDA"
+    // };
 
 
     $scope.submitMyForm = function(){
@@ -173,16 +173,16 @@ var app = angular.module('app', ['ngRoute'])
         $scope.fields.nome_completo = $scope.fields.cognome + " " + $scope.fields.nome;
 
         // post the data to the server
-        // $http.post(urlDB, $scope.fields).
-        //   then(
-        //       function successCallback(response) {
-        //         console.log("Data upload without errors");
-        //         // update local data
-        //         loadLocalData();
-        //       },
-        //       function errorCallback(response) {
-        //         console.log("Error "+response.status+" - "+response.statusText);
-        //       });
+        $http.post(urlDB, $scope.fields).
+          then(
+              function successCallback(response) {
+                console.log("Data upload without errors");
+                // update local data
+                loadLocalData();
+              },
+              function errorCallback(response) {
+                console.log("Error "+response.status+" - "+response.statusText);
+              });
     };
 
 
@@ -210,7 +210,6 @@ var app = angular.module('app', ['ngRoute'])
     $scope.partecipanti = []; // array for partecipants
     $scope.selectionDoc = []; // array for selected tutors
     $scope.docenti = []; // array for tutors
-    $scope.fields.course = true; // set the type of this record to "corso"
     // function to submit data to the database
     $scope.submitMyForm = function(){
         if($scope.partecipanti && $scope.docenti){
@@ -218,14 +217,14 @@ var app = angular.module('app', ['ngRoute'])
           $scope.fields.docenti = $scope.docenti;
         }
 
-
+        $scope.fields.course = true; // set the type of this record to "corso"
         // post data
         $http.post(urlDB, $scope.fields)
           .then(
             function successCallback(response) {
               var corso_id = response.data.id; // get the "_id" of the course
               // request documents with the corresponding participants id
-              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":$scope.papartecipants}).then(
+              $http.post(urlDB+'/_all_docs?include_docs=true',{"keys":$scope.selection}).then(
                 function successCallback(response) {
                   var dipendentiUpdate = []; // initialize empty array for the updated data
                   var n = response.data.rows.length;
@@ -370,6 +369,7 @@ var app = angular.module('app', ['ngRoute'])
       loadLocalData();
       $q.all($rootScope);
     }
+    $scope.orderProp = "-doc.data";
     $scope.modello_num = pianoAddestramentoAnnuale.modello_numero;
     $scope.modello_revisione = pianoAddestramentoAnnuale.revisione;
     $scope.data_revisione_modello = pianoAddestramentoAnnuale.data_revisione;
