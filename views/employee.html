@@ -4,7 +4,7 @@
       <li><a href="/#!/">Home</a></li>
       <li ng-show="!fromCorso"><a href="/#!/employees">Elenco Personale</a></li>
       <li ng-show="fromCorso"><a href="/#!/courses">Elenco Corsi</a></li>
-      <li ng-show="fromCorso"><a href="/#!/course/{{course._id}}">{{course.num_addestramento}}</a></li>
+      <li ng-show="fromCorso"><a href="/#!/course/{{course._id}}" ng-show="course.num_addestramento">{{course.num_addestramento}}</a><a href="/#!/course/{{course._id}}" ng-show="!course.num_addestramento">Formazione</a></li>
       <li class="active">{{dipendente.cognome}} {{dipendente.nome}}</li>
     </ol>
     <div class="row">
@@ -49,8 +49,10 @@
       <tbody>
         <tr ng-repeat="corso in corsi" ng-if="!corso.error">
           <td>{{corso.doc.data | date : 'dd/MM/yyyy'}}</td>
-          <td>{{corso.doc.num_addestramento}}</td>
-          <td>{{corso.doc.argomenti}}</td>
+          <td ng-show="corso.doc.num_addestramento">{{corso.doc.num_addestramento}}</td>
+          <td ng-show="!corso.doc.num_addestramento"> - </td>
+          <td ng-show="corso.doc.argomenti">{{corso.doc.argomenti}}</td>
+          <td ng-show="!corso.doc.argomenti">{{corso.doc.oggetto}}</td>
           <td>{{corso.doc.durata}}</td>
           <td>{{corso.doc.risultato}}</td>
         </tr>

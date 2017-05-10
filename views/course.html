@@ -3,7 +3,7 @@
     <ol class="breadcrumb hidden-print">
       <li><a href="/#!/">Home</a></li>
       <li><a href="/#!/courses">Elenco Corsi</a></li>
-      <li class="active"><a href="/#!/course/{{course._id}}">{{course.num_addestramento}}</a></li>
+      <li class="active"><a href="/#!/course/{{course._id}}">{{course.num_addestramento}}</a><a href="/#!/course/{{course._id}}" ng-show="!course.num_addestramento">Formazione</a></li>
     </ol>
     <div class="row">
       <div class="col-md-3">
@@ -48,15 +48,15 @@
   <div class="row" style="padding-top:4em;">
     <div class="col-md-5 col-md-offset-1">
       <dl class="dl-horizontal">
-        <dt>Rapporto n°:</dt>
-        <dd>{{course.num_addestramento}}</dd>
+        <dt ng-show="course.num_addestramento">Rapporto n°:</dt>
+        <dd ng-show="course.num_addestramento">{{course.num_addestramento}}</dd>
         <dt>Numero partecipanti:</dt>
         <dd>{{course.num_partecipanti}}</dd>
-        <dt>Materiale didattico:</dt>
-        <dd>{{course.documentazione}}</dd>
+        <dt ng-show="course.documentazione">Materiale didattico:</dt>
+        <dd ng-show="course.documentazione">{{course.documentazione}}</dd>
       </dl>
     </div>
-    <div class="col-md-5 col-md-offset-1">
+    <div class="col-md-5 col-md-offset-1" ng-show="course.data != course.data_inizio">
       <dl class="dl-horizontal">
         <dt>Data:</dt>
         <dd>{{course.data | date:"dd/MM/yyyy" }}</dd>
@@ -66,9 +66,15 @@
         <dd>{{course.data_fine | date:"dd/MM/yyyy" }}</dd>
       </dl>
     </div>
+    <div class="col-md-5 col-md-offset-1" ng-show="course.data == course.data_inizio">
+      <dl class="dl-horizontal">
+        <dt>Data:</dt>
+        <dd>{{course.data | date:"dd/MM/yyyy" }}</dd>
+      </dl>
+    </div>
   </div>
   <div class="container-fluid" ng-show="course.partecipanti">
-    <h3 class="text-center">Nominativi dei partecipanti</h3>
+    <h3 class="text-center">Nominativi dei partecipanti e risultati</h3>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -119,7 +125,7 @@
     <h4>Metodo di verifica</h4>
     <p>{{course.metodo_verifica}}</p>
   </div>
-  <div class="container-fluid" ng-show="course.partecipanti">
+  <!--<div class="container-fluid" ng-show="course.partecipanti">
     <h3 class="text-center">Risultati verifica</h3>
     <table class="table table-striped">
       <thead>
@@ -139,5 +145,5 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </div> -->
 </div>
